@@ -81,7 +81,7 @@ const App = () => {
                         backgroundColor: isDarkMode ? Colors.black : Colors.white,
                     }}
                 >
-                    <Button title="test" onPress={() => setVisibleAlert(true)} />
+                    <Button title="test" type="primary" style="round" size="large" onPress={() => setVisibleAlert(true)} />
                 </View>
                 <Alert
                     visible={visibleAlert}
