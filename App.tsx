@@ -27,7 +27,9 @@ import {
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-import { Alert, Button } from './src/shared/components';
+import { Alert, Button, TextInput } from './src/shared/components';
+import { TextInput as Input } from 'react-native-paper';
+// import './i18';
 
 const Section: React.FC<
     PropsWithChildren<{
@@ -68,6 +70,8 @@ const App = () => {
         backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     };
 
+    const [text, setText] = React.useState<string>('');
+
     return (
         <SafeAreaView style={backgroundStyle}>
             <StatusBar
@@ -81,13 +85,37 @@ const App = () => {
                         backgroundColor: isDarkMode ? Colors.black : Colors.white,
                     }}
                 >
-                    <Button title="test" type="primary" style="round" size="large" onPress={() => setVisibleAlert(true)} />
+                    <Button
+                        type="primary"
+                        variant="ghost"
+                        size="large"
+                        onPress={() => setVisibleAlert(true)}
+                    >
+                        <Text style={{fontSize: 30, color:"orange"}}>+</Text>
+                    </Button>
                 </View>
-                <Alert
-                    visible={visibleAlert}
-                    onDismissAlert={() => setVisibleAlert(false)}
-                    message="Test alert"
-                />
+                <View style={{ marginTop: 40 }}>
+                    <Alert
+                        type="neutral"
+                        visible={visibleAlert}
+                        onDismissAlert={() => setVisibleAlert(false)}
+                        message="Test alert"
+                    />
+                </View>
+                <View style={{ marginTop: 80 }}>
+                    <TextInput
+                        colorType="primary"
+                        isPassword={true}
+                        variant="outlined"
+                        label="Email"
+                        placeholder="Enter your Email"
+                        iconRight={
+                            <Input.Icon icon="eye" />
+                        }
+                        text={text}
+                        setText={(text) => setText(text)}
+                    />
+                </View>
             </ScrollView>
         </SafeAreaView>
     );

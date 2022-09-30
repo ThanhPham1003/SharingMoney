@@ -10,7 +10,10 @@
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
     },
     "dependencies": {
+        "i18next": "^21.9.2",
+        "i18next-browser-languagedetector": "^6.1.5",
         "react": "18.1.0",
+        "react-i18next": "^11.18.6",
         "react-native": "0.70.1",
         "react-native-paper": "^4.12.4",
         "react-native-vector-icons": "^9.2.0"

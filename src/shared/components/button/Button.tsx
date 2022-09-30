@@ -2,116 +2,112 @@ import * as React from 'react';
 import { Button as CoreButton } from 'react-native-paper';
 import { Theme } from 'react-native-paper/lib/typescript/types';
 import { withTheme, useTheme } from 'react-native-paper';
-import { View,StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { red100 } from 'react-native-paper/lib/typescript/styles/colors';
 
 interface ButtonProps {
-    title: string;
-    type?: string;
-    style?:string;
-    size?: string;
+    children?: React.ReactNode;
+    type?: 'primary' | 'secondary' | 'neutral' | undefined;
+    variant?: 'filled' | 'ghost' | 'borderless' | 'round' | undefined;
+    size?: 'large' | 'medium' | 'small' | undefined;
 
     onPress?(): void;
-    theme: Theme
+    theme: Theme;
 }
 
-const Button: React.FC<ButtonProps> = ({ title = '',type, style, size,onPress }) => {
+const Button: React.FC<ButtonProps> = ({ children, type, variant, size, onPress }) => {
     const { colors } = useTheme();
-    let backgroundColor;
-    let color;
-    let borderColor;
-    let borderWidth;
-    let borderRadius;
-    let width;
-    let height;
-    let fontSize;
+    let backgroundColor,
+        borderColor,
+        borderWidth,
+        borderRadius,
+        height = 0,
+        paddingHorizontal;
 
-    switch(type){
-        case "primary":
+    switch (type) {
+        case 'primary':
             backgroundColor = colors.primary;
+            borderRadius = 5;
             break;
-        case "secondary":
+        case 'secondary':
             backgroundColor = colors.secondary;
-            break;    
-        case "neutral":
+            borderRadius = 5;
+            break;
+        case 'neutral':
             backgroundColor = colors.neutral_black;
+            borderRadius = 5;
             break;
         default:
-            backgroundColor = colors.primary; 
-    };
-    switch(style){        
-        case "filled":
             break;
-        case "ghost":
-            color = backgroundColor;
-            borderColor =  backgroundColor;
-            borderWidth = 2;
-            backgroundColor = 'transparent'
-
-            break;    
-        case "borderless":
-            color = backgroundColor;
-            backgroundColor = 'transparent'
-
-            break;
-        case "round":
-            color = '#ffffff';
-            borderRadius = 20;
-            break;  
-        default :
-            color = '#ffffff';
-            borderRadius = 0;
-            break;
-        ;      
     }
-    switch(size){
-        case "large":
-            width = 130;
-            height = 56;
-            fontSize = 20;
-            break;    
-        case "medium":
-            width = 110;
-            height = 48;
-            fontSize = 18;
+    switch (size) {
+        case 'large':
+            paddingHorizontal =10,
+            height = 64;
+
             break;
-        case "small":
-            width = 80;
-            height = 36;
-            fontSize = 12;
+        case 'medium':
+            paddingHorizontal = 5,
+            height = 58;
+
+            break;
+        case 'small':
+            paddingHorizontal = 0,
+            height = 54;
+
             break;
         default:
-            width = 136;
-            height = 56;
-            fontSize = 20;
-            break;    
+            break;
+    }
+    switch (variant) {
+        case 'filled':
+            break;
+        case 'ghost':
+            borderColor = backgroundColor;
+            borderWidth = 2;
+            backgroundColor = 'transparent';
+
+            break;
+        case 'borderless':
+            backgroundColor = 'transparent';
+            break;
+        case 'round':
+            borderRadius = height/2;
+            break;
+        default:
+            break;
     }
 
 
     return (
-        <View style={styles.SectionContainer}>
-            <CoreButton style={{...styles.Container, backgroundColor,borderColor,borderWidth,borderRadius,width,height}} onPress={() => onPress && onPress()}>
-                <Text style={{...styles.Text,color,fontSize}}>{title}</Text>
-            </CoreButton>
-        </View>
-
+        <CoreButton
+            style={{
+                ...styles.Container,
+                backgroundColor,
+                borderColor,
+                borderWidth,
+                borderRadius,
+                paddingHorizontal,
+                height
+            }}
+            onPress={() => onPress && onPress()}
+            uppercase={false}
+        >
+            {children}
+        </CoreButton>
     );
 };
 
 const styles = StyleSheet.create({
-    SectionContainer:{
-        height: 70,
+    SectionContainer: {
+        width: 200,
     },
-    Container:{
-        alignItems: 'center',
+    Container: {
+        //borderRadius:20,
         justifyContent: 'center',
-        borderRadius:20,
+        alignItems: 'center',
+        alignSelf: 'center',
     },
-    Text:{
-        fontWeight:'800'
-    }
-
-}
-)
+});
 
 export default withTheme(Button);
