@@ -2,18 +2,14 @@ import * as React from 'react';
 import { Theme } from 'react-native-paper/lib/typescript/types';
 import { withTheme, useTheme } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
-import { HelperText, TextInput as Input } from 'react-native-paper';
-interface TextInputProps {
-    colorType?: "primary" | "secondary" | "neutral" | undefined;
-    isPassword?: boolean;
-    variant?: "outlined" | "flat" | undefined;
-    //iconType?: "iconRight" | "iconLeft" | "none" | undefined;
 
-    //icon?: string;
+import {TextInput as Input} from 'react-native'
+interface TextInputProps {
+    isPassword?: boolean;
+    variant: 'one-line'| 'multiple-lines' | undefined
     iconRight?: React.ReactNode;
     iconLeft?: React.ReactNode;
     text?: string;
-    label?: string;
     placeholder?: string;
 
 
@@ -21,38 +17,33 @@ interface TextInputProps {
     theme: Theme;
 }
 
-const TextInput: React.FC<TextInputProps> = ({ colorType, isPassword=false, variant, label, placeholder, iconRight = null, iconLeft = null, text, setText }) => {
+const TextInput: React.FC<TextInputProps> = ({ isPassword=false, variant, placeholder, iconRight = null, iconLeft = null, text, setText }) => {
     const { colors } = useTheme();
-    let color;
-    switch (colorType) {
-        case "primary":
-            color = colors.primary;
+    let minHeight, isMultipleLines = false;
+    switch (variant) {
+        case "one-line":
+            minHeight = 50;
             break;
-        case "secondary":
-            color = colors.secondary;
+        case "multiple-lines":
+            minHeight = 100;
+            isMultipleLines = true;
             break;
-        case "neutral":
-            color = colors.neutral_black;
-            break;
-
+       
     };
  
     return (
-        <View style={styles.InputSection}>
-            <Input style={{ ...styles.InputSection }}
-                activeOutlineColor={color}
-                outlineColor={color}
-                label={label}
-                mode={variant}
-                placeholder={placeholder}
-                value={text}
+        <View style={{...styles.InputSection, minHeight}}>
+            {iconLeft}
+            <Input style={{...styles.TextSection}}
+                multiline={isMultipleLines}
                 onChangeText={(text) => {
                     setText(text)
                 }}
-                right={iconRight}
-                left={iconLeft}
+                value={text}
+                placeholder={placeholder}
                 secureTextEntry={isPassword}
             />
+            {iconRight}
 
         </View>
 
@@ -61,8 +52,18 @@ const TextInput: React.FC<TextInputProps> = ({ colorType, isPassword=false, vari
 const styles = StyleSheet.create({
     InputSection: {
         backgroundColor: "#ffffff",
-        borderRadius: 15,
+        borderRadius: 10,
         marginHorizontal: 10,
+        borderWidth: 1,
+        paddingHorizontal:15,
+        borderColor: '#C5C6CA',
+        paddingVertical:10,
+        flexDirection: 'row'
+
+    },
+    TextSection:{
+        fontSize: 14,
+        
     }
 })
 export default withTheme(TextInput);
