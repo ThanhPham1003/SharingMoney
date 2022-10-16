@@ -2,12 +2,32 @@ import * as React from 'react';
 import {  Text } from 'react-native';
 import { StyleSheet, View, Image } from 'react-native';
 import { withTheme, useTheme } from 'react-native-paper';
-import Button from '../../shared/components/button/Button'
+import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { useNavigation } from '@react-navigation/native';
+import Button from '../../shared/components/button/Button';
+import API from '../../config/environmentVariables'
+import axios from 'axios';
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = (props) => {
-     const { colors } = useTheme();
+    const { colors } = useTheme();
+    const navigation = useNavigation();
+    const dispatch = useAppDispatch();
+
+    const fetchData = async () => {
+        // const res = await axios.get(API.BASE_URL + "user",  {
+        //     headers: {
+        //         authorization: "Bearer " + "22222",
+        //     }
+        // })
+        console.log("333333", API.BASE_URL + "user")
+    }
+
+
+    React.useEffect(() => {
+        fetchData()
+    })
     return (
         <View style={styles.Container}>
             <View style={styles.PictureSection}>
@@ -28,6 +48,9 @@ const Login: React.FC<LoginProps> = (props) => {
                         type="neutral"
                         variant="ghost"
                         size="medium"
+                        onPress={() => {
+                            navigation.navigate('MAIN', {})
+                        }}
                     >
                         <View style={styles.GoogleButton}>
                             <Image  style={styles.GoogleLogo}

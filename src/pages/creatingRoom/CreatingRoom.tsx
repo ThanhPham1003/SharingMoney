@@ -4,9 +4,9 @@ import { StyleSheet, View } from 'react-native';
 import { withTheme, useTheme } from 'react-native-paper';
 import TextInput from '../../shared/components/textInput/TextInput'
 
-interface CreatingRoom {}
+interface CreatingRoomProps {}
 
-const CreatingRoom: React.FC<CreatingRoom> = (props) => {
+const CreatingRoom: React.FC<CreatingRoomProps> = (props) => {
   const [roomName, setRoomName] = React.useState<string>('')
   const [description, setDescription] = React.useState<string>('')
   const [newMembers, setNewMembers] = React.useState<string>('')

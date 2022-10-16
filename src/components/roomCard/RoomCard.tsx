@@ -10,15 +10,20 @@ const RoomCard: React.FC<RoomCardProps> = (props) => {
   const {colors} = useTheme();
   return(
     <View style={styles.Container}>
-      <View style={styles.RoomNameArea}>
-        <Text style={styles.RoomNameText}> Room's Name Here</Text>
+      <View style={styles.PhotoSection}>
       </View>
-      <View style={styles.RoomDescriptionArea}>
-        <Text>Room's Decription Here</Text>
+      <View style={styles.TextSection}>
+        <View style={styles.RoomNameArea}>
+          <Text style={styles.RoomNameText}>Room's Name Here</Text>
+        </View>
+        <View style={styles.RoomDescriptionArea}>
+          <Text style={{color: colors.neutral_3}}>Room's Decription Here</Text>
+        </View>
+        <View style={styles.RoomMemberArea}>
+          <Text style={{color: colors.neutral_5}}>Icon: Amount of people</Text>
+        </View>
       </View>
-      <View style={styles.RoomMemberArea}>
-        <Text> Icon: Amount of people</Text>
-      </View>
+      
     </View>
   );
 };
@@ -26,7 +31,7 @@ const RoomCard: React.FC<RoomCardProps> = (props) => {
 const styles = StyleSheet.create({
   Container:{
     marginTop: 20,
-    minHeight: 120,
+    minHeight: 124,
     width: ' 90%',
     borderRadius: 10,
     shadowColor: 'black',
@@ -37,25 +42,29 @@ const styles = StyleSheet.create({
     shadowRadius: 11,
     shadowOpacity: 0.1,
     backgroundColor: "#FFFFFF",
+    flexDirection: 'row',
+    padding: 10
+  },
+  PhotoSection:{
+    flex: 0.33,
+    backgroundColor: 'blue',
+    marginRight: 20
+  },
+  TextSection:{
+    flex: 0.65,
+    flexDirection: 'column',
   },
   RoomNameArea:{
-    flex: 0.3,
-    justifyContent: 'center',
-    alignItems: 'center'
   },
   RoomNameText:{
     fontSize: 16,
     fontWeight: '600'
   },
   RoomDescriptionArea:{
-    flex: 0.45,
-    marginLeft: 10,
+    marginTop: 10,
   },
   RoomMemberArea:{
-    flex: 0.25,
-    alignItems: 'flex-end',
-    justifyContent:'center',
-    marginRight: 10,
+    marginTop: 10,
   }
   
 })

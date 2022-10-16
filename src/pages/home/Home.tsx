@@ -3,12 +3,13 @@ import { withTheme, useTheme } from 'react-native-paper';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import {RoomCard} from '../../components'
 import { Button } from '../../shared/components';
+import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign'
 interface HomeProps {}
 
 const Home: React.FC<HomeProps> = (props) => {
     const { colors } = useTheme();
-
+    const navigation = useNavigation();
     return (
         <View style={styles.Container}>
             <View style={{ ...styles.BannerSection, 
@@ -30,7 +31,16 @@ const Home: React.FC<HomeProps> = (props) => {
             </View>
             <View style={styles.CreateRoomSection}>
               <View style={{marginRight: 20}}>
-                <Button type="primary" variant="round" size="large"><Icon name="plus" size={30} color="#ffffff"/></Button>
+                <Button 
+                  type="primary" 
+                  variant="round" 
+                  size="large"
+                  onPress={() => {
+                    navigation.navigate('CREATINGROOM', {})
+                  }}
+                >
+                  <Icon name="plus" size={30} color="#ffffff"/>
+                </Button>
               </View>
             </View>
         </View>
