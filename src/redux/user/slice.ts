@@ -1,18 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { initialState } from './user.interface';
-// import { setToken } from './reducer';
+import { IUser } from 'shared/interfaces/user.interface';
 
-export const userSlice = createSlice({
-    name: 'user',
-    // `createSlice` will infer the state type from the `initialState` argument
+const initialState: IUser = {
+    _id: '',
+    email: '',
+    name: '',
+    type: '',
+    avatar: '',
+};
+
+const userSlice = createSlice({
+    name: 'user-slice',
     initialState,
     reducers: {
-        setToken: (state, action: PayloadAction<string>) => {
-            state.token = action.payload;
+        updateUser: (state, action: PayloadAction<IUser>) => {
+            state = action.payload;
         },
     },
 });
 
-export const { setToken  } = userSlice.actions;
+export const { updateUser } = userSlice.actions;
 
-export default userSlice.reducer;
+export default userSlice;

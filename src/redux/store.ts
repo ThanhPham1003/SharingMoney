@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import user from './user/slice';
+import userSlice from './user/slice';
+import roomSlice from './room/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import type { TypedUseSelectorHook } from 'react-redux';
 
 const store = configureStore({
     reducer: {
-        user: user,
+        room: roomSlice.reducer,
+        user: userSlice.reducer,
     },
 });
 

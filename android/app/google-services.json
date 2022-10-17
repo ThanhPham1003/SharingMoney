@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "135139072266",
+    "project_id": "sharing-money-41128",
+    "storage_bucket": "sharing-money-41128.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:135139072266:android:96a81365b6c39d084f02f3",
+        "android_client_info": {
+          "package_name": "com.dratini.sharing_money"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "135139072266-5l2ab382n6b2lqcl3d8k5cim23ft5ad8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCL3qNYH9DDd7FkP2ZDLTXR-GIep4mYM0Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "135139072266-5l2ab382n6b2lqcl3d8k5cim23ft5ad8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "135139072266-bf2nfmh2ntanodig67fuqi9qt909154n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dratini.sharing-money"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
