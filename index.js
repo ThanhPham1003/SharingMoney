@@ -7,6 +7,8 @@ import App from './App';
 import { name as appName } from './app.json';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import lightColors from './src/shared/themes/light.json';
+import { Provider } from 'react-redux';
+import store from './src/redux/store';
 const theme = {
     ...DefaultTheme,
     colors: {
@@ -16,9 +18,11 @@ const theme = {
 
 export default function Main() {
     return (
-        <PaperProvider theme={theme}>
-            <App />
-        </PaperProvider>
+        <Provider store={store}>
+            <PaperProvider theme={theme}>
+                <App />
+            </PaperProvider>
+        </Provider>
     );
 }
 
