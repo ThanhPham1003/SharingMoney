@@ -10,19 +10,19 @@ interface ButtonProps {
     type?: 'primary' | 'secondary' | 'neutral' | undefined;
     variant?: 'filled' | 'ghost' | 'borderless' | 'round' | undefined;
     size?: 'large' | 'medium' | 'small' | undefined;
-
     onPress?(): void;
     theme: Theme;
 }
 
-const Button: React.FC<ButtonProps> = ({ children, type, variant, size, onPress }) => {
+const Button: React.FC<ButtonProps> = ({ children, type, variant, size,  onPress }) => {
     const { colors } = useTheme();
     let backgroundColor,
         borderColor,
         borderWidth,
         borderRadius,
-        height = 0,
-        paddingHorizontal;
+        paddingVertical = 0,
+        paddingHorizontal,
+        height
 
     switch (type) {
         case 'primary':
@@ -34,7 +34,7 @@ const Button: React.FC<ButtonProps> = ({ children, type, variant, size, onPress 
             borderRadius = 5;
             break;
         case 'neutral':
-            backgroundColor = colors.neutral_black;
+            backgroundColor = colors.neutral_7;
             borderRadius = 5;
             break;
         default:
@@ -42,18 +42,18 @@ const Button: React.FC<ButtonProps> = ({ children, type, variant, size, onPress 
     }
     switch (size) {
         case 'large':
-            paddingHorizontal =10,
-            height = 64;
+            paddingHorizontal =15,
+            paddingVertical=15
 
             break;
         case 'medium':
-            paddingHorizontal = 5,
-            height = 58;
+            paddingHorizontal = 10,
+            paddingVertical = 10
 
             break;
         case 'small':
-            paddingHorizontal = 0,
-            height = 54;
+            paddingHorizontal = 5,
+            paddingVertical = 5
 
             break;
         default:
@@ -64,7 +64,7 @@ const Button: React.FC<ButtonProps> = ({ children, type, variant, size, onPress 
             break;
         case 'ghost':
             borderColor = backgroundColor;
-            borderWidth = 2;
+            borderWidth = 1;
             backgroundColor = 'transparent';
 
             break;
@@ -72,15 +72,16 @@ const Button: React.FC<ButtonProps> = ({ children, type, variant, size, onPress 
             backgroundColor = 'transparent';
             break;
         case 'round':
-            borderRadius = height/2;
+            borderRadius = 64;
             break;
         default:
             break;
     }
 
 
+
     return (
-        <CoreButton
+        <TouchableOpacity
             style={{
                 ...styles.Container,
                 backgroundColor,
@@ -88,13 +89,13 @@ const Button: React.FC<ButtonProps> = ({ children, type, variant, size, onPress 
                 borderWidth,
                 borderRadius,
                 paddingHorizontal,
+                paddingVertical,
                 height
             }}
             onPress={() => onPress && onPress()}
-            uppercase={false}
         >
             {children}
-        </CoreButton>
+        </TouchableOpacity>
     );
 };
 
@@ -107,6 +108,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
+        backgroundColor:'red'
     },
 });
 

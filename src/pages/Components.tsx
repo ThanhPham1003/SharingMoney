@@ -22,6 +22,7 @@ import { TextInput as Input } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import { setToken } from '../redux/user/slice';
 import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/AntDesign';
 // import './i18';
 
 interface ComponentsProps {
@@ -52,18 +53,49 @@ const Components: React.FC<ComponentsProps> = ({}) => {
                         backgroundColor: isDarkMode ? Colors.black : Colors.white,
                     }}
                 >
-                    <Button
-                        type="primary"
-                        variant="ghost"
-                        size="large"
-                        onPress={() => {
-                            dispatch(setToken('binh'));
-                            // setVisibleAlert(true);
-                            navigation.navigate('LOGIN', {});
-                        }}
-                    >
-                        <Text style={{ fontSize: 30, color: 'orange' }}>+</Text>
-                    </Button>
+                    <View style={{marginBottom: 10}}>
+                        <Button
+                            type="primary"
+                            variant="ghost"
+                            size="small"
+                            onPress={() => {
+                                dispatch(setToken('binh'));
+                                // setVisibleAlert(true);
+                                navigation.navigate('CREATINGROOM', {});
+                            }}
+                        >
+                            <Text style={{ fontSize:20, color: 'orange' }}>Page: Create Room</Text>
+                        </Button>
+                    </View>
+                    <View style={{marginBottom: 10}}>
+                        <Button
+                            type="primary"
+                            variant="ghost"
+                            size="small"
+                            onPress={() => {
+                                dispatch(setToken('binh'));
+                                // setVisibleAlert(true);
+                                navigation.navigate('LOGIN', {});
+                            }}
+                        >
+                            <Text style={{ fontSize:20, color: 'orange' }}>Page: Login</Text>
+                        </Button>
+                    </View>
+                    <View style={{marginBottom: 10}}>
+                        <Button
+                            type="primary"
+                            variant="ghost"
+                            size="small"
+                            onPress={() => {
+                                dispatch(setToken('binh'));
+                                // setVisibleAlert(true);
+                                navigation.navigate('HOME', {});
+                            }}
+                        >
+                            <Text style={{ fontSize:20, color: 'orange' }}>Page: Home</Text>
+                        </Button>   
+                    </View>
+                   
                 </View>
                 <View style={{ marginTop: 40 }}>
                     <Alert
@@ -73,14 +105,11 @@ const Components: React.FC<ComponentsProps> = ({}) => {
                         message="Test alert"
                     />
                 </View>
-                <View style={{ marginTop: 80 }}>
+                <View style={{ marginTop: 60 }}>
                     <TextInput
-                        colorType="primary"
                         isPassword={true}
-                        variant="outlined"
-                        label={token}
+                        variant="one-line"
                         placeholder="Enter your Email"
-                        iconRight={<Input.Icon icon="eye" />}
                         text={text}
                         setText={(text) => setText(text)}
                     />
