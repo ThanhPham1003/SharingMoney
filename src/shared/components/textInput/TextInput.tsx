@@ -4,6 +4,7 @@ import { withTheme, useTheme } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 
 import {TextInput as Input} from 'react-native'
+
 interface TextInputProps {
     isPassword?: boolean;
     variant: 'one-line'| 'multiple-lines' | undefined
@@ -32,18 +33,23 @@ const TextInput: React.FC<TextInputProps> = ({ isPassword=false, variant, placeh
     };
  
     return (
-        <View style={{...styles.InputSection, minHeight}}>
-            {iconLeft}
-            <Input style={{...styles.TextSection}}
-                multiline={isMultipleLines}
-                onChangeText={(text) => {
-                    setText(text)
-                }}
-                value={text}
-                placeholder={placeholder}
-                secureTextEntry={isPassword}
-            />
-            {iconRight}
+        <View style={{...styles.InputSection, minHeight,borderColor: colors.neutral_6}}>
+            <View style={{flex: 0.9}}>
+                {iconLeft}
+                <Input style={{...styles.TextSection}}
+                    multiline={isMultipleLines}
+                    onChangeText={(text) => {
+                        setText(text)
+                    }}
+                    value={text}
+                    placeholder={placeholder}
+                    secureTextEntry={isPassword}
+                />
+            </View>
+            <View style={{flex: 0.1}}>
+                {iconRight}
+            </View>
+            
 
         </View>
 
@@ -56,10 +62,9 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         borderWidth: 1,
         paddingHorizontal:15,
-        borderColor: '#C5C6CA',
         paddingVertical:10,
-        flexDirection: 'row'
-
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     TextSection:{
         fontSize: 14,

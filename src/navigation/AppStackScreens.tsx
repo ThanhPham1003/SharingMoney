@@ -11,8 +11,8 @@ const AppStackScreens: React.FC<AppStackScreensProps> = (props) => {
     return (
         <NavigationContainer>
             <Stack.Navigator >
-                <Stack.Screen name="LOGIN" component={Login} />
-                <Stack.Screen name="MAIN" component={MainStackScreens} />
+                <Stack.Screen name="LOGIN" component={Login} options={{headerShown: false}}/>
+                <Stack.Screen name="MAIN" component={MainStackScreens} options={{headerShown: false}}/>
                 {/* <Stack.Screen name="HOME" component={Home} />
                 <Stack.Screen name="CREATINGROOM" component={CreatingRoom} /> */}
             </Stack.Navigator>

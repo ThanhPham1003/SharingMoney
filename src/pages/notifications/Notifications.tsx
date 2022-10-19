@@ -1,15 +1,16 @@
 import * as React from 'react';
-import {View, Text} from 'react-native'
-
+import {View, Text, SafeAreaView} from 'react-native'
+import { Header } from '../../components';
 interface NotificationsProps{}
 
 const Notifications: React.FC<NotificationsProps> = (props) => {
   return (
-    <View>
+    <SafeAreaView>
+      <Header title='NOTIFICATIONS'/>
       <Text>
         Notifications Page
       </Text>
-    </View>
+    </SafeAreaView>
   )
 }
 export default Notifications;

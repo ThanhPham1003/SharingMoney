@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {  Text } from 'react-native';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, SafeAreaView } from 'react-native';
 import { withTheme, useTheme } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useNavigation } from '@react-navigation/native';
@@ -15,21 +15,9 @@ const Login: React.FC<LoginProps> = (props) => {
     const navigation = useNavigation();
     const dispatch = useAppDispatch();
 
-    const fetchData = async () => {
-        // const res = await axios.get(API.BASE_URL + "user",  {
-        //     headers: {
-        //         authorization: "Bearer " + "22222",
-        //     }
-        // })
-        console.log("333333", API.BASE_URL + "user")
-    }
 
-
-    React.useEffect(() => {
-        fetchData()
-    })
     return (
-        <View style={styles.Container}>
+        <SafeAreaView style={styles.Container}>
             <View style={styles.PictureSection}>
                 <Image style={styles.Picture} 
                     source={require('../../assets/images/Login-Picture.png')} 
@@ -77,7 +65,7 @@ const Login: React.FC<LoginProps> = (props) => {
                     </View>
                 </View>
             </View>
-        </View>
+        </SafeAreaView>
 
     );
 };

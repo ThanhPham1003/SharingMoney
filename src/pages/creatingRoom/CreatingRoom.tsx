@@ -1,19 +1,34 @@
 import * as React from 'react';
 import {  Text } from 'react-native';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, SafeAreaView, TouchableOpacity} from 'react-native';
 import { withTheme, useTheme } from 'react-native-paper';
 import TextInput from '../../shared/components/textInput/TextInput'
+import { useNavigation } from '@react-navigation/native';
+import { Header } from '../../components';
+import Icon from 'react-native-vector-icons/AntDesign'
 
 interface CreatingRoomProps {}
 
 const CreatingRoom: React.FC<CreatingRoomProps> = (props) => {
+  const { colors } = useTheme();
+  const navigation = useNavigation();
   const [roomName, setRoomName] = React.useState<string>('')
   const [description, setDescription] = React.useState<string>('')
   const [newMembers, setNewMembers] = React.useState<string>('')
-
+  const backHome = () =>{
+    navigation.navigate('SHARINGMONEY', {})
+  }
 
   return(
-    <View style={styles.Container}>
+    <SafeAreaView style={styles.Container}>
+      <Header 
+        iconRight={
+              <TouchableOpacity onPress={() => backHome()}>
+                <Icon name="close" size={25} color={colors.neutral_4} />
+              </TouchableOpacity>
+        } 
+        title='CREATING ROOM'
+      />
       <View style={styles.TextInputArea}>
         <Text style={styles.FieldNameText}>Tên nhóm</Text>
         <TextInput
@@ -33,7 +48,7 @@ const CreatingRoom: React.FC<CreatingRoomProps> = (props) => {
         />
       </View>
       <View style={styles.TextInputArea}>
-        <Text style={styles.FieldNameText}>Tên nhóm</Text>
+        <Text style={styles.FieldNameText}>Tên thành viên</Text>
         <TextInput
           variant='one-line'
           placeholder='Nhập tên các thành viên'
@@ -41,7 +56,7 @@ const CreatingRoom: React.FC<CreatingRoomProps> = (props) => {
           setText={(text) => setNewMembers(text)}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

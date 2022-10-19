@@ -1,15 +1,16 @@
 import * as React from 'react';
-import {View, Text} from 'react-native'
-
+import {View, Text, SafeAreaView} from 'react-native'
+import { Header } from '../../components';
 interface FriendsProps{}
 
 const Friends: React.FC<FriendsProps> = (props) => {
   return (
-    <View>
+    <SafeAreaView>
+      <Header title='FRIENDS'/>
       <Text>
         Friends Page
       </Text>
-    </View>
+    </SafeAreaView>
   )
 }
 export default Friends;

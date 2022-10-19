@@ -5,5 +5,6 @@ import TextInput  from './textInput/TextInput';
 export {
     Alert,
     Button,
-    TextInput
+    TextInput,
+
 }

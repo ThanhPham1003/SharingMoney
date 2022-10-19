@@ -1,15 +1,19 @@
 import * as React from 'react';
 import { withTheme, useTheme } from 'react-native-paper';
-import { StyleSheet, View, Image, Text } from 'react-native';
-
+import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 interface RoomCardProps {
 
 }
 
 const RoomCard: React.FC<RoomCardProps> = (props) => {
   const {colors} = useTheme();
+  const navigation = useNavigation();
+  const toDetails = () => {
+    navigation.navigate('ROOMDETAIL', {})
+  } 
   return(
-    <View style={styles.Container}>
+    <TouchableOpacity style={styles.Container} onPress={() => toDetails()}>
       <View style={styles.PhotoSection}>
       </View>
       <View style={styles.TextSection}>
@@ -24,7 +28,7 @@ const RoomCard: React.FC<RoomCardProps> = (props) => {
         </View>
       </View>
       
-    </View>
+    </TouchableOpacity>
   );
 };
 

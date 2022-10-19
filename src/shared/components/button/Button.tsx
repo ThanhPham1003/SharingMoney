@@ -3,11 +3,10 @@ import { Button as CoreButton } from 'react-native-paper';
 import { Theme } from 'react-native-paper/lib/typescript/types';
 import { withTheme, useTheme } from 'react-native-paper';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { red100 } from 'react-native-paper/lib/typescript/styles/colors';
 
 interface ButtonProps {
     children?: React.ReactNode;
-    type?: 'primary' | 'secondary' | 'neutral' | undefined;
+    type?: 'primary' | 'secondary' | 'neutral' | 'neutral-active'| undefined;
     variant?: 'filled' | 'ghost' | 'borderless' | 'round' | undefined;
     size?: 'large' | 'medium' | 'small' | undefined;
     onPress?(): void;
@@ -27,16 +26,20 @@ const Button: React.FC<ButtonProps> = ({ children, type, variant, size,  onPress
     switch (type) {
         case 'primary':
             backgroundColor = colors.primary;
-            borderRadius = 5;
+            borderRadius = 10;
             break;
         case 'secondary':
             backgroundColor = colors.secondary;
-            borderRadius = 5;
+            borderRadius = 10;
             break;
         case 'neutral':
-            backgroundColor = colors.neutral_7;
-            borderRadius = 5;
+            backgroundColor = colors.neutral_6;
+            borderRadius = 10;
             break;
+        case 'neutral-active':
+            backgroundColor = colors.neutral;
+            borderRadius = 10;
+            break;    
         default:
             break;
     }

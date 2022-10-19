@@ -36,10 +36,10 @@ const TabStackScreens: React.FC<TabStackScreensProps> = (props) => {
   
   return(
     <TabStack.Navigator screenOptions={screenOptions}>
-        <TabStack.Screen name="HOME" component={Home} />
-        <TabStack.Screen name="FRIENDS" component={Friends} />
-        <TabStack.Screen name="PROFILE" component={Profile} />
-        <TabStack.Screen name="NOTIFICATIONS" component={Notifications} />
+        <TabStack.Screen name="HOME" component={Home} options={{headerShown: false}}/>
+        <TabStack.Screen name="FRIENDS" component={Friends} options={{headerShown: false}}/>
+        <TabStack.Screen name="PROFILE" component={Profile} options={{headerShown: false}}/>
+        <TabStack.Screen name="NOTIFICATIONS" component={Notifications} options={{headerShown: false}}/>
       </TabStack.Navigator>
   )
 }

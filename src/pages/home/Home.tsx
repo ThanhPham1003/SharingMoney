@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { withTheme, useTheme } from 'react-native-paper';
-import { StyleSheet, View, Image, Text } from 'react-native';
+import { StyleSheet, View, Image, Text, SafeAreaView } from 'react-native';
 import {RoomCard} from '../../components'
-import { Button } from '../../shared/components';
+import { Button} from '../../shared/components';
+import { Header } from '../../components';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign'
 interface HomeProps {}
@@ -11,7 +12,8 @@ const Home: React.FC<HomeProps> = (props) => {
     const { colors } = useTheme();
     const navigation = useNavigation();
     return (
-        <View style={styles.Container}>
+        <SafeAreaView style={styles.Container}>
+            <Header title='HOME'/>
             <View style={{ ...styles.BannerSection, 
               backgroundColor: colors.primary_20 }}
             >
@@ -43,7 +45,7 @@ const Home: React.FC<HomeProps> = (props) => {
                 </Button>
               </View>
             </View>
-        </View>
+        </SafeAreaView>
     );
 };
 
@@ -53,7 +55,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
     },
     BannerSection: {
-        flex: 0.21,
+        flex: 0.245,
         flexDirection: 'row',
     },
     TextArea: {

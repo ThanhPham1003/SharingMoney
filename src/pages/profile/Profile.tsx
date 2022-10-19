@@ -1,15 +1,16 @@
 import * as React from 'react';
-import {View, Text} from 'react-native'
-
+import {View, Text, SafeAreaView} from 'react-native'
+import { Header } from '../../components';
 interface ProfileProps{}
 
 const Profile: React.FC<ProfileProps> = (props) => {
   return (
-    <View>
+    <SafeAreaView>
+      <Header title='PROFILE'/>
       <Text>
         Profile Page
       </Text>
-    </View>
+    </SafeAreaView>
   )
 }
 export default Profile;
