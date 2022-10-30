@@ -1,6 +1,6 @@
 import { createNavigationContainerRef } from '@react-navigation/native';
-
-export const navigationRef = createNavigationContainerRef();
+import { MainStackParamList } from './MainStackScreens';
+export const navigationRef = createNavigationContainerRef<MainStackParamList>();
 
 export function navigate(name: any, params: any) {
     if (navigationRef.isReady()) {

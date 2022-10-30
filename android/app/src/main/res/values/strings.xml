@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SharingMoney</string>
+    <string name="facebook_app_id">461949576035398</string><string name="facebook_client_token">9acf24892a039c4b4f66170f9d84e9ae</string>
 </resources>

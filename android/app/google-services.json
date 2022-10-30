@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:135139072266:android:96a81365b6c39d084f02f3",
+        "mobilesdk_app_id": "1:135139072266:android:f686748370e373ce4f02f3",
         "android_client_info": {
-          "package_name": "com.dratini.sharing_money"
+          "package_name": "com.sharingmoney"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "135139072266-0srf538rvf90r03q8ohqsfv6r6k3an21.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sharingmoney",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
         {
           "client_id": "135139072266-5l2ab382n6b2lqcl3d8k5cim23ft5ad8.apps.googleusercontent.com",
           "client_type": 3

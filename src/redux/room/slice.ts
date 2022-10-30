@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IRoom, IRoomStates } from 'shared/interfaces/room.interface';
+import { IRoom, IRoomStates } from '@root/shared/interfaces/room.interface';
 
 const initialState: IRoomStates = {
     rooms: [],

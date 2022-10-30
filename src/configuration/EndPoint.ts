@@ -1,5 +1,5 @@
-import Config from 'react-native-config';
+// import Config from 'react-native-config';
 
 export const endpoint = {
-    api: Config.API_URL,
+    api: "https://sharing-money-api.dratini.tech",
 };
