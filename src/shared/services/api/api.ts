@@ -2,14 +2,14 @@ import axios, { AxiosError } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { endpoint } from '../../../configuration/EndPoint';
 import { LocalStoreName } from '../../enums/local-store.enum';
-
+import { navigate } from "@root/navigation/navigation-helper";
 const api = axios.create({
     baseURL: `${endpoint.api}/`,
 });
 // api.defaults.headers.common['idShop'] = localStorage.getItem('idShop') || 'aaa';
 api.interceptors.request.use(
-    function (config: any) {
-        const token = AsyncStorage.getItem(LocalStoreName.TOKEN);
+    async function (config: any) {
+        const token = await AsyncStorage.getItem(LocalStoreName.TOKEN);
         config.headers = {
             Authorization: `Bearer ${token}`,
         } as any;
@@ -32,13 +32,16 @@ api.interceptors.response.use(
     async function (error: AxiosError) {
         if (error.response && error.response?.status >= 400 && error.response?.status < 500) {
             if (error?.response?.status === 401) {
-                const result = await api.post('auth/retrieve-token', {
-                    refreshToken: AsyncStorage.getItem(LocalStoreName.REFRESH_TOKEN),
+                const refresh_token = await AsyncStorage.getItem(LocalStoreName.REFRESH_TOKEN);
+                const result = await api.post('auth/refresh-token', {
+                    refresh_token,
                 });
                 if (!result.data.token) {
-                    location.href = '/login';
+                    // Todo
+                    // location.href = '/login';
+                    navigate("LOGIN", null)
                 } else {
-                    AsyncStorage.setItem(LocalStoreName.TOKEN, result.data.token);
+                    await AsyncStorage.setItem(LocalStoreName.TOKEN, result.data.token);
                     return api.request(error.config);
                 }
             }

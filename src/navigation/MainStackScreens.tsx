@@ -6,7 +6,12 @@ import TabStackScreens from './TabStackScreens'
 
 interface MainStackScreensProps {}
 
-const Stack = createNativeStackNavigator();
+export type MainStackParamList = {
+    SHARINGMONEY: undefined;
+    CREATINGROOM: undefined;
+};
+
+const Stack = createNativeStackNavigator<MainStackParamList>();
 const MainStackScreens: React.FC<MainStackScreensProps> = (props) => {
   return(
       <Stack.Navigator >
@@ -19,4 +24,4 @@ const MainStackScreens: React.FC<MainStackScreensProps> = (props) => {
   );
 }
 
-export default MainStackScreens; 
+export default MainStackScreens;

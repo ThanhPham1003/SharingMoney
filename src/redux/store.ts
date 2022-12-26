@@ -1,6 +1,7 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import userSlice from './user/slice';
 import roomSlice from './room/slice';
+import appSlice from './app/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import type { TypedUseSelectorHook } from 'react-redux';
 
@@ -8,6 +9,7 @@ const store = configureStore({
     reducer: {
         room: roomSlice.reducer,
         user: userSlice.reducer,
+        app: appSlice.reducer
     },
 });
 
