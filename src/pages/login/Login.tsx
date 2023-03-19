@@ -36,8 +36,8 @@ const Login: React.FC<LoginProps> = (props) => {
 
     const handleLoginFacebook = async () => {
         try {
-            const rs = await firebaseService.signInWithFacebookAndroid();
-            console.log('333333', rs);
+            // const rs = await firebaseService.signInWithFacebookAndroid();
+            console.log('333333');
         } catch (err) {
             console.log('44444', err);
         }
