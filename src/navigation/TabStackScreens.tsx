@@ -47,12 +47,16 @@ const TabStackScreens: React.FC<TabStackScreensProps> = (props) => {
 //   })
   
   return (
-    <TabStack.Navigator>
-        <TabStack.Screen name="HOME" component={Home} />
-        <TabStack.Screen name="FRIENDS" component={Friends} />
-        <TabStack.Screen name="PROFILE" component={Profile} />
-        <TabStack.Screen name="NOTIFICATIONS" component={Notifications} />
-    </TabStack.Navigator>
-);
+      <TabStack.Navigator>
+          <TabStack.Screen name="HOME" component={Home} options={{ headerShown: false }} />
+          <TabStack.Screen name="FRIENDS" component={Friends} options={{ headerShown: false }} />
+          <TabStack.Screen name="PROFILE" component={Profile} options={{ headerShown: false }} />
+          <TabStack.Screen
+              name="NOTIFICATIONS"
+              component={Notifications}
+              options={{ headerShown: false }}
+          />
+      </TabStack.Navigator>
+  );
 }
 export default withTheme(TabStackScreens);

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LocalStoreName } from '@root/shared/enums/local-store.enum';
 // import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
@@ -23,7 +23,6 @@ export const firebaseService = {
             await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
             // Get the users ID token
             const { idToken } = await GoogleSignin.signIn();
-
             // Create a Google credential with the token
             const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
@@ -40,7 +39,16 @@ export const firebaseService = {
             await AsyncStorage.setItem(LocalStoreName.TOKEN, rs);
             return rs;
         } catch (err) {
-            throw "Get Token fail";
+            throw 'Get Token fail';
+        }
+    },
+    signOut: async () => {
+        try {
+            const rs = await auth().signOut();
+            AsyncStorage.getAllKeys().then((keys) => AsyncStorage.multiRemove(keys));
+            return rs;
+        } catch (err) {
+            throw 'Fail at sign out';
         }
     },
     // signInWithFacebookAndroid: async () => {
@@ -49,17 +57,17 @@ export const firebaseService = {
     //     if (result.isCancelled) {
     //       throw 'User cancelled the login process';
     //     }
-      
+
     //     // Once signed in, get the users AccesToken
     //     const data = await AccessToken.getCurrentAccessToken();
-      
+
     //     if (!data) {
     //       throw 'Something went wrong obtaining access token';
     //     }
-      
+
     //     // Create a Firebase credential with the AccessToken
     //     const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
-      
+
     //     // Sign-in the user with the credential
     //     return auth().signInWithCredential(facebookCredential);
     // }

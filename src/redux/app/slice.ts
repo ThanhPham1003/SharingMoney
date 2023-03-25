@@ -3,7 +3,7 @@ import { IAppStates, TAppActions } from '@root/shared/interfaces/app-states.inte
 import { AppActions } from '@root/shared/enums/app-actions.enum';
 
 const initialState: IAppStates = {
-    hasToken: false,
+    accessToken: '',
     loading: false,
 };
 
@@ -11,8 +11,8 @@ const appSlice = createSlice({
     name: 'app-slice',
     initialState,
     reducers: {
-        checkToken: (state, action: PayloadAction<boolean>) => {
-            state.hasToken = action.payload;
+        checkToken: (state, action: PayloadAction<string>) => {
+            state.accessToken = action.payload;
         },
         setLoading: (state, action: PayloadAction<boolean>) => {
             state.loading = action.payload;

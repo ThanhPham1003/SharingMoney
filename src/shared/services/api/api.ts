@@ -1,12 +1,11 @@
 import axios, { AxiosError } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { endpoint } from '../../../configuration/EndPoint';
+import { endpoint } from '../../../configuration/endpoint';
 import { LocalStoreName } from '../../enums/local-store.enum';
 import { navigate } from "@root/navigation/navigation-helper";
 const api = axios.create({
     baseURL: `${endpoint.api}/`,
 });
-// api.defaults.headers.common['idShop'] = localStorage.getItem('idShop') || 'aaa';
 api.interceptors.request.use(
     async function (config: any) {
         const token = await AsyncStorage.getItem(LocalStoreName.TOKEN);
@@ -33,7 +32,7 @@ api.interceptors.response.use(
         if (error.response && error.response?.status >= 400 && error.response?.status < 500) {
             if (error?.response?.status === 401) {
                 const refresh_token = await AsyncStorage.getItem(LocalStoreName.REFRESH_TOKEN);
-                const result = await api.post('auth/refresh-token', {
+                const result = await api.post('/auth/retrieve-token', {
                     refresh_token,
                 });
                 if (!result.data.token) {

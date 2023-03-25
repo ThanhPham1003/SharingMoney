@@ -9,6 +9,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LocalStoreName } from '@root/shared/enums/local-store.enum';
 import { useAppDispatch, useAppSelector } from '@root/redux/store';
 import { verifyToken } from '@root/redux/app/action';
+import { TouchableOpacity, Text } from 'react-native';
+import Reactotron from 'reactotron-react-native';
 interface AppStackScreensProps {}
 
 type MainStackParamList = {
@@ -19,7 +21,7 @@ type MainStackParamList = {
 const Stack = createNativeStackNavigator<MainStackParamList>();
 const AppStackScreens: React.FC<AppStackScreensProps> = (props) => {
     const dispatch = useAppDispatch();
-
+    const { accessToken = '' } = useAppSelector((state) => state.app);
     const [initializing, setInitializing] = useState<boolean>(true);
     const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
 
@@ -33,10 +35,9 @@ const AppStackScreens: React.FC<AppStackScreensProps> = (props) => {
     };
 
     const getToken = async (user: FirebaseAuthTypes.User) => {
-        const token = await AsyncStorage.getItem(LocalStoreName.TOKEN);
-        
-        await firebaseService.getToken(user);
-        dispatch(verifyToken());
+        Reactotron.log('hello rendering world');
+        const rs = await firebaseService.getToken(user);
+        dispatch(verifyToken(rs));
     };
 
     useEffect(() => {
@@ -44,14 +45,33 @@ const AppStackScreens: React.FC<AppStackScreensProps> = (props) => {
         return subscriber; // unsubscribe on unmount
     }, []);
 
+    useEffect(() => {
+        Reactotron.log("33333", accessToken);
+        
+    }, [accessToken])
+
     if (initializing) return null;
     return (
         <NavigationContainer>
             <Stack.Navigator>
                 {!user ? (
-                    <Stack.Screen name="LOGIN" component={Login} options={{headerShown: false}} />
+                    <Stack.Screen name="LOGIN" component={Login} options={{ headerShown: false }} />
                 ) : (
-                    <Stack.Screen name="MAIN" component={MainStackScreens} options={{headerShown: false}} />
+                    <Stack.Screen
+                        name="MAIN"
+                        component={MainStackScreens}
+                        options={{
+                            headerRight: () => (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        firebaseService.signOut();
+                                    }}
+                                >
+                                    <Text>sign out</Text>
+                                </TouchableOpacity>
+                            ),
+                        }}
+                    />
                 )}
                 {/* <Stack.Screen name="HOME" component={Home} />
                 <Stack.Screen name="CREATINGROOM" component={CreatingRoom} /> */}

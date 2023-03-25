@@ -28,10 +28,6 @@ const CreatingExpense: React.FC<CreatingExpenseProps> = (props) => {
   const back = () =>{
     navigation.navigate('ROOMDETAIL', {})
   }
-  // React.useEffect(()=>{
-  //   console.log('33333', date)
-  // },[date])
-  
 
   return(
     <SafeAreaView style={styles.Container}>

@@ -17,20 +17,8 @@ const Login: React.FC<LoginProps> = (props) => {
     const handleLoginGoogle = async () => {
         try {
             const rs = await firebaseService.signInWithGoogle();
-            console.log('66666', rs);
-
-            // await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-            // // Get the users ID token
-            // const { idToken } = await GoogleSignin.signIn();
-
-            // // Create a Google credential with the token
-            // const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-            // // Sign-in the user with the credential
-            // const rs = await auth().signInWithCredential(googleCredential);
-            // console.log('11111', rs);
         } catch (err) {
-            console.log('22222', err);
+            console.log(err);
         }
     };
 
