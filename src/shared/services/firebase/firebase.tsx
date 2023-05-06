@@ -4,6 +4,8 @@ import { LocalStoreName } from '@root/shared/enums/local-store.enum';
 // import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage'
+import reactotron from 'reactotron-react-native';
 GoogleSignin.configure({
     // scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
     webClientId: '135139072266-5l2ab382n6b2lqcl3d8k5cim23ft5ad8', // client ID of type WEB for your server (needed to verify user ID and offline access)
@@ -51,6 +53,20 @@ export const firebaseService = {
             throw 'Fail at sign out';
         }
     },
+    uploadImage: async (uri: string, fileName: string) => {
+        try{
+
+            const reference = storage().ref(fileName);
+            const pathToFile = uri;
+            await reference.putFile(pathToFile);
+            const url = await storage().ref(fileName).getDownloadURL();
+            reactotron.log("77777", url)
+            return url;
+        }catch(err){
+            throw 'Could not select image'
+        }
+        
+    }
     // signInWithFacebookAndroid: async () => {
     //     const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
 

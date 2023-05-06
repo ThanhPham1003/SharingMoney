@@ -2,26 +2,29 @@ import * as React from 'react';
 import { withTheme, useTheme } from 'react-native-paper';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { IRoom } from '@root/shared/interfaces/room.interface';
+import reactotron from 'reactotron-react-native';
 interface RoomCardProps {
-
+  room: IRoom
 }
 
-const RoomCard: React.FC<RoomCardProps> = (props) => {
+const RoomCard: React.FC<RoomCardProps> = (props: RoomCardProps) => {
+  const {room} = props;
   const {colors} = useTheme();
   const navigation = useNavigation();
   const toDetails = () => {
-    navigation.navigate('ROOMDETAIL', {})
-  } 
+    navigation.navigate('ROOMDETAIL', {room: room})
+  }
   return(
     <TouchableOpacity style={styles.Container} onPress={() => toDetails()}>
       <View style={styles.PhotoSection}>
       </View>
       <View style={styles.TextSection}>
         <View style={styles.RoomNameArea}>
-          <Text style={styles.RoomNameText}>Room's Name Here</Text>
+          <Text style={styles.RoomNameText}>{room.name}</Text>
         </View>
         <View style={styles.RoomDescriptionArea}>
-          <Text style={{color: colors.neutral_3}}>Room's Decription Here</Text>
+          <Text style={{color: colors.neutral_3}}>{room.description}</Text>
         </View>
         <View style={styles.RoomMemberArea}>
           <Text style={{color: colors.neutral_5}}>Icon: Amount of people</Text>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { CreatingRoom, RoomDetail, ExpenseDetail, CreatingExpense } from '../pages';
+import { CreatingRoom, RoomDetail, ExpenseDetail, CreatingExpense, Friends, CreatingFriend } from '../pages';
 import TabStackScreens from './TabStackScreens';
 import { ApolloProvider } from '@apollo/client';
 import { client } from '@root/configuration/apollo';
@@ -10,10 +10,12 @@ interface MainStackScreensProps {}
 
 export type MainStackParamList = {
     SHARINGMONEY: {};
+    FRIENDS:{}
     CREATINGROOM: {};
     ROOMDETAIL: {};
     EXPENSEDETAIL: {};
     CREATINGEXPENSE: {};
+    CREATINGFRIEND:{}
 };
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
@@ -44,6 +46,16 @@ const MainStackScreens: React.FC<MainStackScreensProps> = (props) => {
                 <Stack.Screen
                     name="CREATINGEXPENSE"
                     component={CreatingExpense}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="FRIENDS"
+                    component={Friends}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="CREATINGFRIEND"
+                    component={CreatingFriend}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>

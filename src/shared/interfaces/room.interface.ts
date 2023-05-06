@@ -4,11 +4,12 @@ export interface IRoom {
     description?: string;
     owner?: any;
     active?: boolean;
-    user_ids: string[];
+    users: string[];
     summary: any;
     created_at: Date;
     updated_at?: Date;
     deleted_at?: Date;
+    imgUrl? : string; 
 }
 
 export interface IRoomStates {

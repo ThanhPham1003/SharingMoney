@@ -1,34 +1,53 @@
 import * as React from 'react';
 import { withTheme, useTheme } from 'react-native-paper';
-import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
-import {RoomCard} from '../../components'
+import { StyleSheet, View, Image, Text, TouchableOpacity,  } from 'react-native';
+import { IExpense } from '@root/shared/interfaces/expense.interface';
 import { useNavigation } from '@react-navigation/native';
+import reactotron from 'reactotron-react-native';
+import { GET_USER } from '@root/graphql/queries/user.query';
+import { useQuery, useMutation } from '@apollo/client';
+import { IRoom } from '@root/shared/interfaces/room.interface';
 interface ExpenseProps {
+  expense: IExpense
+  room: IRoom
 }
 
-const ExpenseCard: React.FC<ExpenseProps> = (props) => {
+const ExpenseCard: React.FC<ExpenseProps> = (props: ExpenseProps) => {
+  const {room, expense} = props;
   const { colors } = useTheme();
   const navigation = useNavigation();
+
+  const { data, loading, error } = useQuery(GET_USER, {
+    variables: { id: expense?.payer },
+  });
+  const [payerInfo, setPayerInfo] = React.useState({
+    name: "",
+  });
+  React.useEffect(() => {
+    if (data) {
+        setPayerInfo(data.user);
+    }
+  }, [data]);
   const toDetails = () => {
-    navigation.navigate('EXPENSEDETAIL', {})
+    navigation.navigate('EXPENSEDETAIL', {expense: expense, payer: payerInfo.name, room: room})
   } 
   return (
     <TouchableOpacity style={styles.Container} onPress={() => toDetails()}>
       <View style={styles.TitleSection}>
         <View style={styles.TitleNameArea}>
-          <Text style={styles.TitleNameText}>Expense Name</Text>
+          <Text style={styles.TitleNameText}>{expense.name}</Text>
         </View>
 
         <View style={styles.ExpenseTypeArea}>
-          <Text style={styles.ExpenseTypeText}>Type</Text>
+          <Text style={styles.ExpenseTypeText}>{expense.__typename}</Text>
         </View>
       </View>
       <View style={styles.DecriptionSection}>
         <View style={styles.DecriptionTextArea}>
-          <Text style={{...styles.DecriptionText, color: colors.neutral_4}}>Decription Here</Text>
+          <Text style={{...styles.DecriptionText, color: colors.neutral_4}}>{expense.description}</Text>
         </View>
         <View style={styles.AmountArea}>
-          <Text style={{...styles.AmountText, color: colors.primary}}>1.000.000đ</Text>
+          <Text style={{...styles.AmountText, color: colors.primary}}>{expense.total}</Text>
         </View>
       </View>
       <View style={styles.LineSection}>
@@ -42,7 +61,7 @@ const ExpenseCard: React.FC<ExpenseProps> = (props) => {
           <Image  style={styles.PictureProfileArea}
             source={require('../../assets/images/Facebook-Logo.png')} 
           />
-          <Text style={{...styles.PayerNameText, color: colors.neutral_4}}>Payer Name</Text>
+          <Text style={{...styles.PayerNameText, color: colors.neutral_4}}>{payerInfo.name}</Text>
         </View>
         <View style={styles.TimeArea}>
           <Text style={{...styles.TimeText,color: colors.neutral_6}}> Time here</Text>

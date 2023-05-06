@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   Container:{
     marginTop: 20,
     minHeight: 64,
-    width: ' 90%',
+    width: ' 100%',
     borderRadius: 8,
     shadowColor: 'black',
     shadowOffset:{
@@ -43,9 +43,10 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 11,
     shadowOpacity: 0.1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#ffffff",
     flexDirection: 'row',
-    padding: 10
+    padding: 10,
+    
   },
   ElementLeftSection:{
     flex: 0.2,
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   NameSection:{
-    flex: 0.5,
+    flex: 0.45,
     justifyContent: 'center',
   },
   NameText:{
@@ -61,9 +62,9 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   ElementRightSection:{
-    flex: 0.3,
+    flex: 0.35,
     justifyContent: 'center',
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
   }
 })
 export default withTheme(UserCard)

@@ -60,17 +60,7 @@ const AppStackScreens: React.FC<AppStackScreensProps> = (props) => {
                     <Stack.Screen
                         name="MAIN"
                         component={MainStackScreens}
-                        options={{
-                            headerRight: () => (
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        firebaseService.signOut();
-                                    }}
-                                >
-                                    <Text>sign out</Text>
-                                </TouchableOpacity>
-                            ),
-                        }}
+                        options={{headerShown: false}}
                     />
                 )}
                 {/* <Stack.Screen name="HOME" component={Home} />

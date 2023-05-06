@@ -8,7 +8,7 @@ import Profile from './profile/Profile';
 import RoomDetail from './roomDetail/RoomDetail'
 import ExpenseDetail from './expenseDetail/ExpenseDetail';
 import CreatingExpense from './creatingExpense/CreatingExpense';
-
+import CreatingFriend from './creatingFriend/CreatingFriend';
 export { 
   Components, 
   Login,
@@ -19,5 +19,6 @@ export {
   Profile, 
   RoomDetail, 
   ExpenseDetail, 
-  CreatingExpense 
+  CreatingExpense,
+  CreatingFriend 
 };

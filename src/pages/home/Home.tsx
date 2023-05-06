@@ -1,6 +1,6 @@
 import react, { useEffect, useState } from 'react';
 import { withTheme, useTheme } from 'react-native-paper';
-import { StyleSheet, View, Image, Text, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Image, Text, SafeAreaView,ScrollView, FlatList } from 'react-native';
 import { RoomCard } from '../../components';
 import { Button } from '../../shared/components';
 import { Header } from '../../components';
@@ -9,6 +9,10 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { useQuery } from '@apollo/client';
 import { get } from 'lodash';
 import { GET_ALL_ROOMS } from '@root/graphql/queries/room.query';
+import {IRoom} from  '@root/shared/interfaces/room.interface';
+
+import reactotron from 'reactotron-react-native';
+import TextInput from '../../shared/components/textInput/TextInput'
 
 interface HomeProps {}
 const useGetList = (data: any, loading: boolean) => {
@@ -28,7 +32,31 @@ const Home: React.FC<HomeProps> = (props) => {
     const { data, loading, error } = useQuery(GET_ALL_ROOMS, {
         variables: { page: 1, pageSize: 10, limit: 10 },
     });
-    const list = useGetList(data, loading);
+    const [roomList, setRoomList] = useState([])
+    const [searchingText, setSearchingText] = useState('');
+    const searchFilter = (text: string) => {
+        if(text) {        
+            const newRoomList = data.rooms.filter((item: IRoom) => {
+            const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase();
+            const textData = text.toUpperCase();
+            return itemData.indexOf(textData) > -1;
+          });
+          setRoomList(newRoomList)
+          setSearchingText(text);
+        }else{
+          setRoomList(data.rooms);
+          setSearchingText(text);
+        }
+    }
+    useEffect(() => {
+        if(data){
+            setRoomList(data.rooms)
+        }
+    }, [data])
+    useEffect(() => {
+        reactotron.log("88888", searchingText)
+    },[searchingText])
+
     return (
         <SafeAreaView style={styles.Container}>
             {/* <Header title='HOME'/> */}
@@ -49,9 +77,24 @@ const Home: React.FC<HomeProps> = (props) => {
                     />
                 </View>
             </View>
-            <View style={styles.RoomListSection}>
-                <RoomCard />
+            <View style={styles.SearchingSection}>
+                <TextInput
+                    iconLeft={
+                        <Icon style={{marginLeft: 5}} name="search1" size={20} color={colors.neutral} />
+                    }
+                    variant='one-line'
+                    placeholder='Searching room here...'
+                    text={searchingText}
+                    setText={(text) => searchFilter(text)}
+                />
             </View>
+            <ScrollView style={styles.RoomListSection} contentContainerStyle={{flexGrow : 1, alignItems : 'center'}}>
+                {roomList &&
+                    roomList.map((roomDetail: IRoom, index: number) => (
+                        <RoomCard key={index} room={roomDetail}/>
+                    ))
+                }
+            </ScrollView>
             <View style={styles.CreateRoomSection}>
                 <View style={{ marginRight: 20 }}>
                     <Button
@@ -101,18 +144,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     PhotoStyle: {
-        width: 263,
-        height: 158,
-        marginRight: 70,
+        width: 203,
+        height: 118,
+        marginRight: 20,
     },
     RoomListSection: {
-        flex: 0.64,
-        alignItems: 'center',
+        flex: 0.66,
     },
     CreateRoomSection: {
-        flex: 0.15,
+        flex: 0.13,
         alignItems: 'flex-end',
     },
+    SearchingSection:{
+        marginHorizontal: 10,
+        marginTop: 10,
+    }
 });
 
 export default withTheme(Home);

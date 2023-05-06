@@ -8,7 +8,6 @@ const GET_ALL_ROOMS = gql`
             owner
             description
             users
-            description
         }
     }
 `;

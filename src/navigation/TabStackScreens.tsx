@@ -18,36 +18,29 @@ type TabStackParamList = {
 const TabStack = createBottomTabNavigator<TabStackParamList>();
 const TabStackScreens: React.FC<TabStackScreensProps> = (props) => {
     const { colors } = useTheme();
-//     const screenOptions = ({ route }) => ({
-//         tabBarIcon: ({ focused = false, color = ""  }) => {
-//             let iconName;
+    const screenOptions = ({ route }) => ({
+        tabBarIcon: ({ focused = false, color = ""  }) => {
+                let iconName;
 
-//             if (route?.name === 'HOME') {
-//                 iconName = focused ? 'home' : 'home-outline';
-//             } else if (route?.name === 'FRIENDS') {
-//                 iconName = focused ? 'people-sharp' : 'people-outline';
-//             } else if (route?.name === 'PROFILE') {
-//                 iconName = focused ? 'person' : 'person-outline';
-//             } else if (route?.name === 'NOTIFICATIONS') {
-//                 iconName = focused ? 'notifications-sharp' : 'notifications-outline';
-//             }
+                if (route?.name === 'HOME') {
+                    iconName = focused ? 'home' : 'home-outline';
+                } else if (route?.name === 'FRIENDS') {
+                    iconName = focused ? 'people-sharp' : 'people-outline';
+                } else if (route?.name === 'PROFILE') {
+                    iconName = focused ? 'person' : 'person-outline';
+                } else if (route?.name === 'NOTIFICATIONS') {
+                    iconName = focused ? 'notifications-sharp' : 'notifications-outline';
+                }
 
-//             // You can return any component that you like here!
-//             return <Ionicons name={iconName} size={25} color={color} />;
-//         },
-//         tabBarActiveTintColor: colors.primary,
-//         tabBarInactiveTintColor: 'gray',
-//     });
-
-//       // You can return any component that you like here!
-//       return <Ionicons name={iconName} size = {25} color={color} />;
-//     },
-//     tabBarActiveTintColor: colors.primary,
-//     tabBarInactiveTintColor: 'gray',
-//   })
+                // You can return any component that you like here!
+                return <Ionicons name={iconName} size={25} color={color} />;
+            },
+            tabBarActiveTintColor: colors.primary,
+            tabBarInactiveTintColor: 'gray',
+    });
   
   return (
-      <TabStack.Navigator>
+      <TabStack.Navigator screenOptions={screenOptions}>
           <TabStack.Screen name="HOME" component={Home} options={{ headerShown: false }} />
           <TabStack.Screen name="FRIENDS" component={Friends} options={{ headerShown: false }} />
           <TabStack.Screen name="PROFILE" component={Profile} options={{ headerShown: false }} />

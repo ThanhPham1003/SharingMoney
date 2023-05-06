@@ -4,21 +4,22 @@ import { withTheme, useTheme } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 
 import {TextInput as Input} from 'react-native'
+import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 
-interface TextInputProps {
+interface NumberInputProps {
     isPassword?: boolean;
     variant: 'one-line'| 'multiple-lines' | undefined
     iconRight?: React.ReactNode;
     iconLeft?: React.ReactNode;
-    text?: string;
+    number?: number;
     placeholder?: string;
 
 
-    setText (text: string): void;
+    setNumber (number: number): void;
     theme: Theme;
 }
 
-const TextInput: React.FC<TextInputProps> = ({ isPassword=false, variant, placeholder, iconRight = null, iconLeft = null, text, setText }) => {
+const NumberInput: React.FC<NumberInputProps> = ({ isPassword=false, variant, placeholder, iconRight = null, iconLeft = null, number, setNumber }) => {
     const { colors } = useTheme();
     let minHeight, isMultipleLines = false;
     switch (variant) {
@@ -39,11 +40,12 @@ const TextInput: React.FC<TextInputProps> = ({ isPassword=false, variant, placeh
                 <Input style={{...styles.TextSection}}
                     multiline={isMultipleLines}
                     onChangeText={(text) => {
-                        setText(text)
+                        setNumber(Number(text))
                     }}
-                    value={text}
+                    value={number}
                     placeholder={placeholder}
                     secureTextEntry={isPassword}
+                    keyboardType='numeric'
                 />
             </View>
             <View style={{flex: 0.1}}>
@@ -71,4 +73,4 @@ const styles = StyleSheet.create({
         
     }
 })
-export default withTheme(TextInput);
+export default withTheme(NumberInput);

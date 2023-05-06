@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache, from, fromPromise, concat } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { RetryLink } from '@apollo/client/link/retry';
-import { endpoint } from './endpoint';
+import { endpoint } from './endpoint'; 
 import api from '@root/shared/services/api/api';
 import { LocalStoreName } from '@root/shared/enums/local-store.enum';
 import createUploadLink from 'apollo-upload-client/public/createUploadLink.js';

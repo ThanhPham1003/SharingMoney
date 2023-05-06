@@ -5,17 +5,26 @@ import { Header } from '../../components';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign'
 import {UserCard} from '../../components'
-interface ExpenseDetailProps{}
+import reactotron from 'reactotron-react-native';
+import { IExpense, IUserShare } from '@root/shared/interfaces/expense.interface';
+import UserSharesList from '../userSharesList/UserSharesList';
+import { IRoom } from '@root/shared/interfaces/room.interface';
+interface ExpenseDetailProps{
+  route?: any;
+  expense: IExpense
+  room: IRoom
+}
 
-const ExpenseDetail: React.FC<ExpenseDetailProps> = (props) => {
+const ExpenseDetail: React.FC<ExpenseDetailProps> = ({route}) => {
   const { colors } = useTheme();
+  const expense = route.params.expense;
+  const room = route.params.room;
   const navigation = useNavigation();
   const [isInfoActive, setIsInfoActive] = React.useState<boolean>(true)
   const activeColor = colors.primary;
 
-
   const backPrevious = () => {
-    navigation.navigate('ROOMDETAIL', {})
+    navigation.navigate('ROOMDETAIL', {room: room})
   }
   return(
     <SafeAreaView style={styles.Container}>
@@ -54,13 +63,13 @@ const ExpenseDetail: React.FC<ExpenseDetailProps> = (props) => {
         <>
           <View style={{...styles.ExpenseCard, backgroundColor: colors.primary_10}}>
             <View style={styles.CardTitle}>
-              <Text style={styles.CardTitleText}>Title Here</Text>
+              <Text style={styles.CardTitleText}>{expense.name}</Text>
             </View>
             <View style={styles.CardDecription}>
-              <Text style={{...styles.CardDecriptionText, color: colors.neutral_4}}>Decription Here</Text>
+              <Text style={{...styles.CardDecriptionText, color: colors.neutral_4}}>{expense.description}</Text>
             </View>
             <View style={{...styles.Amount, backgroundColor: colors.primary_20}}>
-              <Text style={{...styles.AmountText, color: colors.primary}}>1.000.000đ</Text>
+              <Text style={{...styles.AmountText, color: colors.primary}}>{expense.total}</Text>
             </View>
           </View>
           <View style={styles.ExpenseDetails}>
@@ -70,7 +79,7 @@ const ExpenseDetail: React.FC<ExpenseDetailProps> = (props) => {
               </View>
               <View style={styles.EachDetailInfo}>
                 <View style={styles.ExpenseType}>
-                  <Text style={{...styles.EachDetailText, color: '#fff', fontWeight: '600'}}>Normal</Text>
+                  <Text style={{...styles.EachDetailText, color: '#fff', fontWeight: '600'}}>{expense.__typename}</Text>
                 </View>
               </View>
 
@@ -84,7 +93,7 @@ const ExpenseDetail: React.FC<ExpenseDetailProps> = (props) => {
                   <Image  style={styles.SmallPictureProfile}
                     source={require('../../assets/images/Facebook-Logo.png')} 
                   />
-                  <Text style={{...styles.EachDetailText, color: colors.neutral_4}}>Payer's Name</Text>
+                  <Text style={{...styles.EachDetailText, color: colors.neutral_4}}>{route.params.payer}</Text>
                 </View>
                   
               </View>
@@ -101,7 +110,7 @@ const ExpenseDetail: React.FC<ExpenseDetailProps> = (props) => {
       </>
       ):(
         <>
-          <UserCard
+          {/* <UserCard
             elementLeft={
               <Image  style={styles.BigPictureProfile}
                 source={require('../../assets/images/Facebook-Logo.png')} 
@@ -114,7 +123,13 @@ const ExpenseDetail: React.FC<ExpenseDetailProps> = (props) => {
                 <Text style={{...styles.AmountNeededText, color: colors.primary}}>1.000.000đ</Text>
               </>
             } 
-          />
+          /> */}
+          {expense.userShares &&
+            expense.userShares.map((userShare: IUserShare, index: number) => (
+              <UserSharesList key={index} userShare={userShare}/>
+            ))
+
+          }
         </>
       )}
       
