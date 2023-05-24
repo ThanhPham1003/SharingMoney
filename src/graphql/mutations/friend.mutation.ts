@@ -15,6 +15,13 @@ const CONFIRM_FRIEND_MUTATION = gql`
       confirmed
     }
   }
+`;
+const DELETE_FRIEND_MUTATION = gql`
+  mutation removeFriend($id: String!){
+    removeFriend(id: $id){
+      _id
+    }
+  }
 `
 
-export { CREATE_FRIEND_MUTATION, CONFIRM_FRIEND_MUTATION};
+export { CREATE_FRIEND_MUTATION, CONFIRM_FRIEND_MUTATION, DELETE_FRIEND_MUTATION};

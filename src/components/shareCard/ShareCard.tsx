@@ -46,7 +46,7 @@ const ShareCard: React.FC<ShareCardProps> = (props) =>{
         <UserCard
           elementLeft={
               <Image  style={styles.PictureProfile}
-                source={require('../../assets/images/Facebook-Logo.png')} 
+                source={require('../../assets/images/User.png')} 
               />
             } 
           name={memberInfo?.name || ""}

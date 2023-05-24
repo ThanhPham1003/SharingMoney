@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {  KeyboardAvoidingView, Platform,ScrollView, Text } from 'react-native';
+import {useContext } from 'react';
 import { StyleSheet, View, SafeAreaView, TouchableOpacity, FlatList, Image, ActivityIndicator, Alert} from 'react-native';
 import { withTheme, useTheme } from 'react-native-paper';
 import TextInput from '../../shared/components/textInput/TextInput'
@@ -24,6 +25,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import { firebaseService } from '@root/shared/services/firebase/firebase';
 import {request, PERMISSIONS} from 'react-native-permissions'
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
+import { ExpenseUpdatedContext } from '@root/context';
 
 interface CreatingExpenseProps {
   room: IRoom
@@ -50,6 +52,7 @@ const CreatingExpense: React.FC<CreatingExpenseProps> = () => {
   const [isOpeningSnackbar, setIsOpeningSnackbar] = React.useState<boolean>(false)
   const [expenseImageUri, setExpenseImageUri] = React.useState(null);
   const [expenseImageName, setExpenseImageName] = React.useState(null);
+  const reloadContext = useContext(ExpenseUpdatedContext)
   const back = () =>{
     navigation.navigate('ROOMDETAIL', {room: room})
   }
@@ -66,7 +69,7 @@ const CreatingExpense: React.FC<CreatingExpenseProps> = () => {
       handleUserShares();
     }
   }
-  const handleUserShares = () => {
+  const handleUserShares = async () => {
     setIsLoaded(false)
     let newUS = null
     if(isSharingEvenly){
@@ -89,13 +92,15 @@ const CreatingExpense: React.FC<CreatingExpenseProps> = () => {
         }
       })
     }
+    const url = await firebaseService.uploadImage(expenseImageUri, expenseImageName)
       handleCreateExpense({
         name: expenseName,
         description: description,
         payer: payer,
         userShares: newUS, 
         total: amountOfMoney,
-        roomId: room._id
+        roomId: room._id,
+        images: [url]
       });
   }
   const handleCreateExpense = async (expenseDetail: any) => {
@@ -103,17 +108,21 @@ const CreatingExpense: React.FC<CreatingExpenseProps> = () => {
       await createExpense({ 
         variables:{ createExpenseInput: expenseDetail}
       })
-      setExpenseName('');
-      setDescription('');
-      setPayer('');
-      setAmountOfMoney(0);
-      setDateText("");
-      setDateISO("")
-      setIsLoaded(true),
-      setIsOpeningSnackbar(true);
+      
       Alert.alert('Alert','Create Expense Successfully', [
           
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
+        {text: 'OK', onPress: () => {
+          setExpenseName('');
+          setDescription('');
+          setPayer('');
+          setAmountOfMoney(0);
+          setDateText("");
+          setDateISO("")
+          setExpenseImageUri(null);
+          setIsLoaded(true),
+          setIsOpeningSnackbar(true);
+          reloadContext?.setReload({isExpenseListUpdated: true})
+        }},
       ]);
     }catch{
       setIsLoaded(true);
@@ -512,13 +521,13 @@ const styles = StyleSheet.create({
   },
   UploadPhotoArea:{
     marginHorizontal: 10,
-    height: '20%',
     justifyContent: 'center',
     alignItems: 'center'
   },
   UploadPhotoButton:{
     height: 100,
     width: 100,
+    marginVertical: 10,
     borderWidth: 1,
     borderStyle: 'dashed',
     justifyContent: 'center', 

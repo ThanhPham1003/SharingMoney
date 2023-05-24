@@ -14,12 +14,15 @@ const appSlice = createSlice({
         checkToken: (state, action: PayloadAction<string>) => {
             state.accessToken = action.payload;
         },
+        clearToken: (state) => {
+            state.accessToken = '';
+        },
         setLoading: (state, action: PayloadAction<boolean>) => {
             state.loading = action.payload;
         },
     },
 });
 
-export const { checkToken, setLoading } = appSlice.actions;
+export const { checkToken, clearToken, setLoading } = appSlice.actions;
 
 export default appSlice;

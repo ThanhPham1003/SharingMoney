@@ -35,7 +35,6 @@ const AppStackScreens: React.FC<AppStackScreensProps> = (props) => {
     };
 
     const getToken = async (user: FirebaseAuthTypes.User) => {
-        Reactotron.log('hello rendering world');
         const rs = await firebaseService.getToken(user);
         dispatch(verifyToken(rs));
     };
@@ -45,16 +44,12 @@ const AppStackScreens: React.FC<AppStackScreensProps> = (props) => {
         return subscriber; // unsubscribe on unmount
     }, []);
 
-    useEffect(() => {
-        Reactotron.log("33333", accessToken);
-        
-    }, [accessToken])
 
     if (initializing) return null;
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                {!user ? (
+                {!accessToken ? (
                     <Stack.Screen name="LOGIN" component={Login} options={{ headerShown: false }} />
                 ) : (
                     <Stack.Screen

@@ -47,7 +47,9 @@ export const firebaseService = {
     signOut: async () => {
         try {
             const rs = await auth().signOut();
-            AsyncStorage.getAllKeys().then((keys) => AsyncStorage.multiRemove(keys));
+            reactotron.log("Rssssss", rs);
+            const temp = await AsyncStorage.getAllKeys().then((keys) => AsyncStorage.multiRemove(keys))
+            reactotron.log("555555", temp)
             return rs;
         } catch (err) {
             throw 'Fail at sign out';
@@ -60,7 +62,6 @@ export const firebaseService = {
             const pathToFile = uri;
             await reference.putFile(pathToFile);
             const url = await storage().ref(fileName).getDownloadURL();
-            reactotron.log("77777", url)
             return url;
         }catch(err){
             throw 'Could not select image'

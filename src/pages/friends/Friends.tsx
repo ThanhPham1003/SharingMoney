@@ -1,5 +1,5 @@
-import react, { useEffect, useState } from 'react';
-import {View, Text, SafeAreaView, StyleSheet, TouchableOpacity, ScrollView, Modal} from 'react-native'
+import react, { useEffect, useState, useContext } from 'react';
+import {View, Text, SafeAreaView, StyleSheet, TouchableOpacity, ScrollView, Alert} from 'react-native'
 import { FriendCard, Header } from '../../components';
 import { withTheme, useTheme } from 'react-native-paper';
 import { useMutation, useQuery } from '@apollo/client';
@@ -14,21 +14,30 @@ import { Button } from '../../shared/components';
 import Icon from 'react-native-vector-icons/AntDesign';
 import RequestFriend from './RequestFriend';
 import { IFriend } from '@root/shared/interfaces/friend.interface';
+import { DELETE_FRIEND_MUTATION } from '@root/graphql/mutations/friend.mutation';
+import { FriendUpdatedContext} from '@root/context';
 interface FriendsProps{}
-const useGetList = (data: any, loading: boolean) => {
-  const [list, setList] = useState([]);
-  useEffect(() => {
-      if (!loading && data) {
-          setList(data);
-      }
-  }, [data, loading]);
-  return get(list, 'friends', []);
-};
+// const useGetList = (data: any, loading: boolean) => {
+//   const [list, setList] = useState([]);
+//   useEffect(() => {
+//       if (!loading && data) {
+//           setList(data);
+//       }
+//   }, [data, loading]);
+//   return get(list, 'friends', []);
+// };
 const Friends: React.FC<FriendsProps> = (props) => {
   const { colors } = useTheme();
   const navigation = useNavigation();
   const activeColor = colors.primary;
   const [isFriendsActive, setIsFriendsActive] = useState<boolean>(true)
+  const [isDeletingFriend, setIsDeletingFriend] = useState<boolean>(false)
+  const [friendList, setFriendList] = useState([])
+  const reloadContext = useContext(FriendUpdatedContext)
+  const [focusFriend, setFocusFriend] = useState({
+    _id:"",
+    name: ""
+  })
   const [currentUser, setCurrentUser] = useState({
     id: ""
 } || null);
@@ -40,15 +49,47 @@ const Friends: React.FC<FriendsProps> = (props) => {
     } 
   }
   
-  const { data, loading, error} = useQuery(GET_ALL_FRIENDS, {
+  const { data, loading, error, refetch} = useQuery(GET_ALL_FRIENDS, {
     variables: { page: 1, limit: 50, confirmed: true},
   });
-  const list = useGetList(data, loading);
+  const [deleteFriend, {error: errorCreateExpense, loading: isLoading, data: createExpenseData}] = useMutation(DELETE_FRIEND_MUTATION)
 
+  const removeFriend = async () =>{
+    Alert.alert("Alert", `Do you want to delete ${focusFriend.name} from this room?`, [
+      {text: "Cancel", onPress: () => setIsDeletingFriend(false)},
+      {text: "Confirm", onPress: async () => {
+        try{
+          await deleteFriend({
+            variables: { id: focusFriend._id}
+          })
+          Alert.alert('Alert', 'Delete Friend Successfully', [
+            {text: 'OK', onPress: () => {
+              setIsDeletingFriend(false);
+              reloadContext?.setReload({isFriendListUpdated: true})
+
+            }}
+          ])
+        }catch{
+          Alert.alert('Alert',"Couldn't delete friend members.", [
+          
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+        }
+      }}
+    ])
+  }
 
   useEffect( () => {
        getId();
-},[])   
+  },[]) 
+  useEffect(() => {
+    refetch();
+  },[reloadContext?.reload?.isFriendListUpdated])  
+  useEffect(() => {
+    if(data){
+        setFriendList(data.friends)
+    }
+  }, [data])
   return (
     <SafeAreaView style={styles.Container}>
       <Header title='FRIENDS'/>
@@ -78,9 +119,9 @@ const Friends: React.FC<FriendsProps> = (props) => {
         
         {isFriendsActive ? (
           <ScrollView contentContainerStyle={{flexGrow : 1, alignItems : 'center'}}>
-            {list &&
-              list.map((friend: IFriend, index: number) => (
-                <FriendCard key={index} friend={friend} currentUserID={currentUser.id}/>
+            {friendList &&
+              friendList.map((friend: IFriend, index: number) => (
+                <FriendCard key={index} friend={friend} setIsDeletingFriend={setIsDeletingFriend}  setFocusFriend={setFocusFriend} isDeletingFriend={isDeletingFriend} currentUserID={currentUser.id}/>
               ))
             } 
           </ScrollView>  
@@ -89,20 +130,32 @@ const Friends: React.FC<FriendsProps> = (props) => {
           <RequestFriend currentUserID={currentUser.id} />
         )}
       </View>
-      <View style={styles.CreateFriendSection}>
-        <View style={{ marginRight: 20 }}>
-          <Button
-            type="primary"
-            variant="round"
-            size="large"
-            onPress={() =>{
-              navigation.navigate('CREATINGFRIEND', {});
-            }}
-          >
-            <Icon name="plus" size={30} color="#ffffff" />
-          </Button>
+      {!isDeletingFriend ? (
+        <View style={styles.CreateFriendSection}>
+          <View style={{ marginRight: 20 }}>
+            <Button
+              type="primary"
+              variant="round"
+              size="large"
+              onPress={() =>{
+                navigation.navigate('CREATINGFRIEND', {});
+              }}
+            >
+              <Icon name="plus" size={30} color="#ffffff" />
+            </Button>
+          </View>
         </View>
+
+      ):(
+        <View style ={{...styles.DeletingMemberSection, borderTopColor: colors.neutral_4, backgroundColor: colors.primary_10}}>
+        <TouchableOpacity onPress={() => removeFriend()}>
+          <Text style={styles.TextRoomUpdate}>Delete</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setIsDeletingFriend(false)}>
+          <Text style={styles.TextRoomUpdate}>Cancel</Text>
+        </TouchableOpacity>
       </View>
+      )}
 
 
       
@@ -170,5 +223,18 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
   },
+  TextRoomUpdate:{
+    fontSize: 16,
+    fontWeight: '600',
+    marginVertical: 5,
+    marginLeft: 12,
+  },
+  DeletingMemberSection:{
+    flex: 0.1,
+    borderTopWidth: 0.5,
+    width:'100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 })
 export default withTheme(Friends);

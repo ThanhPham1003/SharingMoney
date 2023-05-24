@@ -10,10 +10,13 @@ import { Button} from '../../shared/components';
 interface FriendCardProps{
   friend: IFriend
   currentUserID?: string
+  setIsDeletingFriend() : void
+  setFocusFriend() : void
+  isDeletingFriend: boolean
 }
 
 const FriendCard: React.FC<FriendCardProps> = (props) =>{
-  const {friend, currentUserID} = props
+  const {friend, currentUserID, setIsDeletingFriend, isDeletingFriend, setFocusFriend} = props
   const frId = friend.requester === currentUserID ? friend.receiver : friend.requester
   const { data, loading, error } = useQuery(GET_USER, {
     variables: { id: frId },
@@ -27,10 +30,10 @@ const FriendCard: React.FC<FriendCardProps> = (props) =>{
     }
   }, [data])
   return(
-    <TouchableOpacity style={styles.Container}>
+    <TouchableOpacity style={styles.Container} onPress={() => {setIsDeletingFriend(!isDeletingFriend); setFocusFriend({name: memberInfo.name, _id: friend._id})}}>
       <View style={styles.PhotoSection}>
         <Image  style={styles.PictureProfile}
-            source={require('../../assets/images/Facebook-Logo.png')} 
+            source={require('../../assets/images/User.png')} 
         />
       </View>
       <View style={styles.NameSection}>

@@ -16,6 +16,7 @@ query GetAllFriends($page: Int!, $limit: Int!, $confirmed: Boolean!, $receiver: 
   friends(page: $page, limit: $limit, confirmed: $confirmed, receiver: $receiver){
     _id 
     requester
+    receiver
   }
 }
 `;

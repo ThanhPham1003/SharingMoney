@@ -41,9 +41,9 @@ const Login: React.FC<LoginProps> = (props) => {
             </View>
             <View style={styles.MainSection}>
                 <View style={styles.LoginTittleSection}>
-                    <Text style={styles.LoginTittleText}>Đăng Nhập</Text>
+                    <Text style={styles.LoginTittleText}>Sign in</Text>
                     <View style={styles.LoginContentText}>
-                        <Text style={{ fontSize: 16 }}> Chào mừng bạn đến với </Text>
+                        <Text style={{ fontSize: 16 }}> Welcome to </Text>
                         <Text style={{ fontWeight: '700', fontSize: 16 }}>Sharing Money</Text>
                     </View>
                 </View>
@@ -61,10 +61,10 @@ const Login: React.FC<LoginProps> = (props) => {
                                 style={styles.GoogleLogo}
                                 source={require('../../assets/images/Google-Logo.png')}
                             />
-                            <Text style={styles.ButtonText}>Đăng Nhập với Google</Text>
+                            <Text style={styles.ButtonText}>Sign in with Google</Text>
                         </View>
                     </Button>
-                    <View style={{ marginTop: 20 }}>
+                    {/* <View style={{ marginTop: 20 }}>
                         <Button
                             type="neutral"
                             variant="ghost"
@@ -79,7 +79,7 @@ const Login: React.FC<LoginProps> = (props) => {
                                 <Text style={styles.ButtonText}>Đăng Nhập với Facebook</Text>
                             </View>
                         </Button>
-                    </View>
+                    </View> */}
                 </View>
             </View>
         </SafeAreaView>

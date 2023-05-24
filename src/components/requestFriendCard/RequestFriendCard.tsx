@@ -1,5 +1,5 @@
-import react, { useEffect, useState } from 'react';
-import { StyleSheet, View, SafeAreaView, TouchableOpacity, Text, Image, ScrollView } from 'react-native';
+import react, { useEffect, useState, useContext } from 'react';
+import { StyleSheet, View, SafeAreaView, TouchableOpacity, Text, Image, Alert } from 'react-native';
 import { CONFIRM_FRIEND_MUTATION } from '@root/graphql/mutations/friend.mutation';
 import reactotron from 'reactotron-react-native';
 import { UserCard } from '@root/components';
@@ -7,14 +7,16 @@ import { GET_USER } from '@root/graphql/queries/user.query';
 import { useQuery, useMutation } from '@apollo/client';
 import { IRequest } from '@root/shared/interfaces/friend.interface';
 import { Button} from '../../shared/components';
-
+import { FriendUpdatedContext} from '@root/context';
 interface RequestFriendCardProps{
   requester: IRequest
   userId?: string
+  setIsUpdated() : void
 }
 
 const RequestFriendCard: React.FC<RequestFriendCardProps> = (props) =>{
-  const {requester, userId} = props
+  const {requester, userId, setIsUpdated} = props
+  const reloadContext = useContext(FriendUpdatedContext)
   const { data, loading, error } = useQuery(GET_USER, {
     variables: { id: requester.requester },
   });
@@ -23,16 +25,31 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = (props) =>{
   })
   const [confirmFriend,{ error: errorCreateFriend, loading: isLoading, data: createFriendData }] = useMutation(CONFIRM_FRIEND_MUTATION);
   const handleAccept = async () => {
-    await confirmFriend({
-        variables: {updateFriendInput: {
-                id: requester._id, 
-                confirmed: true, 
-                requester: requester.requester, 
-                receiver: userId
-            }
-        }
-    });
-}
+    try{
+      await confirmFriend({
+          variables: {updateFriendInput: {
+                  id: requester._id, 
+                  confirmed: true, 
+                  requester: requester.requester, 
+                  receiver: userId
+              }
+          }
+      });
+      Alert.alert('Alert', 'Confirmed friend request successfully', [
+        {text: 'OK', onPress: () => {
+          reloadContext?.setReload({isFriendListUpdated: true})
+          setIsUpdated(true);
+        }}
+      ])
+    }catch{
+      Alert.alert('Alert',"Couldn't confirm friend request.", [
+      
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+    }
+  }
+  const handleDelete = async () => {
+  }
   useEffect(() => {
     if(data){
       setMemberInfo(data.user)
@@ -42,11 +59,11 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = (props) =>{
     <TouchableOpacity style={styles.Container}>
       <View style={styles.PhotoSection}>
         <Image  style={styles.PictureProfile}
-                  source={require('../../assets/images/Facebook-Logo.png')} 
+                  source={require('../../assets/images/User.png')} 
         />
       </View>
       <View style={styles.NameAndButtonSection}>
-        <Text style={styles.NameText}>{memberInfo?.name||""}</Text>
+        <Text style={styles.NameText}>{memberInfo?.name}</Text>
         <View style={styles.ButtonSection}>
           <Button 
                 type='primary'
@@ -64,8 +81,9 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = (props) =>{
                   type='neutral'
                   variant='filled'
                   size='medium'
+                  onPress={() => handleDelete()}
             >
-                  <View style={{paddingHorizontal: 20}}>
+                  <View style={{paddingHorizontal: 20}} >
                     <Text>Delete</Text>
                   </View>
             </Button>
@@ -73,7 +91,7 @@ const RequestFriendCard: React.FC<RequestFriendCardProps> = (props) =>{
         </View>
       </View>
       <View style={styles.TimeSection}>
-        <Text>10w</Text>
+        <Text style={{fontSize: 12}}>24/05</Text>
       </View>
 
     </TouchableOpacity>

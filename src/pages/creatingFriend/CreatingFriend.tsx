@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { SafeAreaView, TouchableOpacity, View, StyleSheet, Text } from 'react-native';
+import { SafeAreaView, TouchableOpacity, View, StyleSheet, Text, Alert } from 'react-native';
 import { Header } from '../../components';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
@@ -34,6 +34,11 @@ const CreatingFriend: React.FC<CreatingFriendProps> = () => {
         variables: { createFriendInput: {receiver: email}},
     });
     setEmail('');
+    Alert.alert('Alert','Friend request was sent', [
+          
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ]);
+
   };
   useEffect(() => {
     verifyEmail(email)
@@ -60,7 +65,7 @@ const CreatingFriend: React.FC<CreatingFriendProps> = () => {
              
              <>
                <View style={{marginHorizontal: 10, marginTop:5}}>
-                 <Text style={styles.WarningText}>Email is invalid</Text>
+                 <Text style={styles.WarningText}>Email is invalid or empty</Text>
                </View>
              </>
            ):(<></>)}

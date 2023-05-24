@@ -7,15 +7,19 @@ import { GET_USER } from '@root/graphql/queries/user.query';
 import { useQuery, useMutation } from '@apollo/client';
 interface MemBerRoomListProps{
   memberId: string
+  isMakeAdmin : boolean
+  setIsMakeAdmin(): void
+  setFocusUser(): void
 }
 
 const MemberRoomList: React.FC<MemBerRoomListProps> = (props) =>{
-  const {memberId} = props
+  const {memberId, isMakeAdmin, setIsMakeAdmin, setFocusUser} = props
   const { data, loading, error } = useQuery(GET_USER, {
     variables: { id: memberId },
   });
   const [memberInfo, setMemberInfo] = useState({
-    name: ""
+    name: "",
+    _id: ""
   })
   useEffect(() => {
     if(data){
@@ -23,28 +27,29 @@ const MemberRoomList: React.FC<MemBerRoomListProps> = (props) =>{
     }
   }, [data])
   return(
-    <View style={{...styles.Container}}>
-      <View style={{width: '90%'}}>
+    <TouchableOpacity style={{...styles.Container}} onPress={() => {setIsMakeAdmin(!isMakeAdmin); setFocusUser(memberInfo)} }>
+
         <UserCard
           elementLeft={
               <Image  style={styles.PictureProfile}
-                source={require('../../assets/images/Facebook-Logo.png')} 
+                source={require('../../assets/images/User.png')} 
               />
             } 
           name={memberInfo?.name || ""}
         />
-      </View>
-    </View>
+
+    </TouchableOpacity>
   )
 };
 const styles = StyleSheet.create({
   Container:{
     alignItems: 'center',
     justifyContent: 'center',
+    marginHorizontal: 10
   },
   PictureProfile:{
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
   },
 })
 

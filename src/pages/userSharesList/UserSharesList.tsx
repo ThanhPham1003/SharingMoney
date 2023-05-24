@@ -9,11 +9,12 @@ import { UserCard } from '@root/components';
 
 interface UserSharesListProps{
   userShare: IUserShare
+  setIsDeleting() : void
 }
 
 const UserSharesList: React.FC<UserSharesListProps> = (props) => {
   const { colors } = useTheme();
-  const {userShare} = props
+  const {userShare, setIsDeleting} = props
   const { data, loading, error } = useQuery(GET_USER, {
     variables: { id: userShare.payer },
   });
@@ -25,39 +26,34 @@ const UserSharesList: React.FC<UserSharesListProps> = (props) => {
       setUserShareInfo(data.user)
     }
   }, [data])
-  useEffect(() => {
-    reactotron.log("33333", userShare.amount)
-  }, [userShare])
   return(
-  <View style={styles.Container}>
-    <View style={{width: '90%'}}>
+  <TouchableOpacity style={styles.Container} onPress={() => setIsDeleting(true)}>
       <UserCard
             elementLeft={
               <Image  style={styles.PictureProfile}
-                source={require('../../assets/images/Facebook-Logo.png')} 
+                source={require('../../assets/images/User.png')} 
               />
             } 
             name={userShareInfo.name}
             elementRight={
               <>
-                <Text style={{...styles.ShareText, color: colors.neutral_4}}>{userShare.percent}</Text>
+                <Text style={{...styles.ShareText, color: colors.neutral_4}}>{userShare.percent}%</Text>
                 <Text style={{...styles.AmountNeededText, color: colors.primary}}>{userShare.amount}</Text>
               </>
             } 
       />
-
-    </View>
-  </View>
+  </TouchableOpacity>
   )
 }
 const styles = StyleSheet.create({
   Container:{
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginHorizontal: 10
   },
   PictureProfile:{
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
   },
   ShareText:{
     fontSize: 13,

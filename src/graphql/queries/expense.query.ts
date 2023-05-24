@@ -9,6 +9,7 @@ const GET_ALL_EXPENSES =gql`
       payer
       description
       userShares{payer, amount, percent}
+      images
     }
   }
 `

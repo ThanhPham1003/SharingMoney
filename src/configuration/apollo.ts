@@ -11,12 +11,12 @@ import { setContext } from 'apollo-link-context';
 
 const authMiddleware = setContext(async (_, { headers }) => {
     const token = await AsyncStorage.getItem(LocalStoreName.TOKEN);
-    console.log("11111", token);
+    console.log("TOken: ", token);
     
     return {
         headers: {
             ...headers,
-            Authorization: token || null,
+            Authorization: `Bearer ${token || null}`,
         },
     };
 });

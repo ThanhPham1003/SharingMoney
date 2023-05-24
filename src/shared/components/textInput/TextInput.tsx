@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
     InputSection: {
         backgroundColor: "#ffffff",
         borderRadius: 10,
-        marginHorizontal: 10,
         borderWidth: 1,
         paddingHorizontal:5,
         paddingVertical: 15,

@@ -6,6 +6,7 @@ export interface  IExpense{
   description: string;
   __typename: string;
   userShares: any;
+  images: string[];
 }
 export interface IUserShare{
   payer: string,

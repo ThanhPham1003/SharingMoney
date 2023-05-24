@@ -1,13 +1,14 @@
 import { gql } from '@apollo/client';
 
-const GET_ALL_ROOMS = gql`
-    query GetAllRooms($page: Int!, $limit: Int!) {
-        rooms(page: $page, limit: $limit) {
+const GET_MY_ROOMS = gql`
+    query GetMyRooms($page: Int!, $limit: Int!) {
+        myrooms(page: $page, limit: $limit) {
             _id
             name
             owner
             description
             users
+            image
         }
     }
 `;
@@ -18,9 +19,11 @@ const GET_ROOM_DETAIL = gql`
             _id
             name
             users
+            description
             owner
+            image
         }
     }
 `;
 
-export { GET_ALL_ROOMS, GET_ROOM_DETAIL };
+export { GET_MY_ROOMS, GET_ROOM_DETAIL };

@@ -3,6 +3,7 @@ export interface IRoom {
     name: string;
     description?: string;
     owner?: any;
+    image?: string;
     active?: boolean;
     users: string[];
     summary: any;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import {  Text } from 'react-native';
 import { StyleSheet, View, SafeAreaView, TouchableOpacity, FlatList, Platform, Image, Alert} from 'react-native';
 import { withTheme, useTheme } from 'react-native-paper';
@@ -20,17 +20,12 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import { firebaseService } from '@root/shared/services/firebase/firebase';
 import {request, PERMISSIONS} from 'react-native-permissions'
 import { Decode } from '@root/shared/services/decode/jwt-decode';
+import { RoomUpdatedContext, RoomUpdatedProvider } from '@root/context';
+import { IFriend } from '@root/shared/interfaces/friend.interface';
+import Icon3 from 'react-native-vector-icons/Feather';
 
 interface CreatingRoomProps {}
-const useGetList = (data: any, loading: boolean) => {
-  const [list, setList] = useState([]);
-  useEffect(() => {
-      if (!loading && data) {
-          setList(data);
-      }
-  }, [data, loading]);
-  return get(list, 'friends', []);
-};
+
 const CreatingRoom: React.FC<CreatingRoomProps> = (props) => {
   const { colors } = useTheme();
   const navigation = useNavigation();
@@ -42,9 +37,12 @@ const CreatingRoom: React.FC<CreatingRoomProps> = (props) => {
   const [isFriendsActive, setIsFriendsActive] = React.useState<boolean>(true)
   const [roomProfileImage, setRoomProfileImage] = useState(null);
   const [imageName, setImageName] = useState(null);
+  const [friendList, setFriendList] = useState([]);
+  const reloadContext = useContext(RoomUpdatedContext)
   const activeColor = colors.primary;
   const selectMember = (id: string) =>{
     setMembers([...members, id])
+   
   }
   const deleteMember = (id: string) => {
     setMembers(members.filter(members => members !== id))
@@ -63,7 +61,6 @@ const CreatingRoom: React.FC<CreatingRoomProps> = (props) => {
   const { data, loading, error } = useQuery(GET_ALL_FRIENDS, {
         variables: { page: 1, limit: 50, confirmed: true},
   });
-  const list = useGetList(data, loading);
   const backHome = () =>{
     navigation.navigate('SHARINGMONEY', {})
   }
@@ -73,7 +70,7 @@ const CreatingRoom: React.FC<CreatingRoomProps> = (props) => {
       setIsValidEmail(true)
     }else setIsValidEmail(false)
   }
-  const isEnoughInformation = () => {
+  const isEnoughInformation = () => {  
     if(!roomName || !members.length){
       Alert.alert('Alert','Please enter correct and complete information required.', [
         
@@ -85,10 +82,22 @@ const CreatingRoom: React.FC<CreatingRoomProps> = (props) => {
     }
   }
   const handleCreateRoom = async () => {
+    
     const url = await firebaseService.uploadImage(roomProfileImage, imageName)
     await createRoom({
       variables: { createRoomInput: {name: roomName,description: description, users: members, image: url}}
     })
+   
+    Alert.alert('Alert','Create Room Successfully', [
+          
+      {text: 'OK', onPress: () => {
+        setRoomName('');
+        setDescription('');
+        setMembers([]);
+        setRoomProfileImage(null);
+        reloadContext?.setReload({isRoomListUpdated: true})
+      }},
+    ]);
   }
   let options = {
     saveToPhotos: true,
@@ -108,6 +117,26 @@ const CreatingRoom: React.FC<CreatingRoomProps> = (props) => {
   React.useEffect( () => {
     getId();  
   },[])
+  useEffect(() =>{
+    if(data)
+    {
+      setFriendList(data.friends)
+    }
+  }, [data])
+  useEffect(() =>{
+    if(data)
+    {
+      const newFriendList = data.friends.filter((item: IFriend, index: number) => {
+        const frId = item.requester === currentUser.id ? item.receiver : item.requester
+        return members.indexOf(frId) === -1
+      })
+      setFriendList(newFriendList)
+    }
+  }, [members])
+
+
+
+
   return(
     <SafeAreaView style={styles.Container}>
       <Header 
@@ -149,7 +178,7 @@ const CreatingRoom: React.FC<CreatingRoomProps> = (props) => {
         <Text style={styles.FieldNameText}>Add Members</Text>
       </View>
      
-      <View style={styles.AddMemberTab}>
+      {/* <View style={styles.AddMemberTab}>
         
         {isFriendsActive ? (
           <>
@@ -170,25 +199,30 @@ const CreatingRoom: React.FC<CreatingRoomProps> = (props) => {
             </TouchableOpacity >
           </>
         )}
-      </View>
-      {isFriendsActive ? (
+      </View> */}
+
         <View style={styles.AddFriendArea}>        
           <View style={{...styles.FriendList, borderColor: colors.neutral_7}}>
             <FlatList
-              data={list}
+              data={friendList}
               renderItem={({item})  => <AddMemberCard friend={item} selectMember={selectMember} currentUserID={currentUser.id} /> }
-              keyExtractor={(item, index) => item.key}
+              keyExtractor={(item, index) => index.toString()}
             />
           </View>
         </View>
 
-      ):(
+      {/* ):(
         <View style={styles.TextInputArea}>
           <TextInput
             variant='one-line'
             placeholder='Enter email of other'
             text={email}
             setText={(text) => setEmail(text)}
+            iconRight={
+              <TouchableOpacity>
+                <Icon3 name="send" size={20} color={colors.neutral}/>
+              </TouchableOpacity>
+            }
           />
           {!isValidEmail ? (
              
@@ -199,7 +233,7 @@ const CreatingRoom: React.FC<CreatingRoomProps> = (props) => {
              </>
            ):(<></>)}
       </View>
-      )}    
+      )}     */}
       {!members.length ? (
              <>
                <View style={{marginLeft: 20, marginTop:5}}>
@@ -211,7 +245,7 @@ const CreatingRoom: React.FC<CreatingRoomProps> = (props) => {
         <FlatList
             data={members}
             renderItem={({item})  => <MemberAddedCard id={item} deleteMember={deleteMember}/> }
-            keyExtractor={(item, index) => item.key}
+            keyExtractor={(item, index) => index.toString()}
         />
       </View>
       <View style={styles.TextInputArea}>

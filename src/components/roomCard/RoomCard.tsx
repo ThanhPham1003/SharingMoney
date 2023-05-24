@@ -3,6 +3,8 @@ import { withTheme, useTheme } from 'react-native-paper';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { IRoom } from '@root/shared/interfaces/room.interface';
+import { GET_USER } from '@root/graphql/queries/user.query';
+import { useQuery, useMutation } from '@apollo/client';
 import reactotron from 'reactotron-react-native';
 interface RoomCardProps {
   room: IRoom
@@ -12,12 +14,29 @@ const RoomCard: React.FC<RoomCardProps> = (props: RoomCardProps) => {
   const {room} = props;
   const {colors} = useTheme();
   const navigation = useNavigation();
+  const { data, loading, error } = useQuery(GET_USER, {
+    variables: { id: room.owner },
+  });
+  const [ownerInfo, setOwnerInfo] = React.useState({
+    name: "",
+    _id: "",
+  });
   const toDetails = () => {
     navigation.navigate('ROOMDETAIL', {room: room})
   }
+  React.useEffect(() => {
+    if (data) {
+        setOwnerInfo(data.user);
+    }
+  }, [data]);
+  React.useEffect(() => {
+    console.log("444444", room._id)
+  }, [])
+  const amoutOfMember = room.users.length
   return(
     <TouchableOpacity style={styles.Container} onPress={() => toDetails()}>
       <View style={styles.PhotoSection}>
+        <Image style={{height: 100, width: 100}} source={{uri: room.image}}/>
       </View>
       <View style={styles.TextSection}>
         <View style={styles.RoomNameArea}>
@@ -27,7 +46,10 @@ const RoomCard: React.FC<RoomCardProps> = (props: RoomCardProps) => {
           <Text style={{color: colors.neutral_3}}>{room.description}</Text>
         </View>
         <View style={styles.RoomMemberArea}>
-          <Text style={{color: colors.neutral_5}}>Icon: Amount of people</Text>
+          <Text style={{color: colors.neutral_5}}>{amoutOfMember} members</Text>
+        </View>
+        <View style={styles.RoomMemberArea}>
+          <Text style={{color: colors.neutral_5}}>Owner: {ownerInfo.name}</Text>
         </View>
       </View>
       
@@ -54,8 +76,9 @@ const styles = StyleSheet.create({
   },
   PhotoSection:{
     flex: 0.33,
-    backgroundColor: 'blue',
-    marginRight: 20
+    marginRight: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   TextSection:{
     flex: 0.65,

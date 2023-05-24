@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { CreatingRoom, RoomDetail, ExpenseDetail, CreatingExpense, Friends, CreatingFriend } from '../pages';
+import { CreatingRoom, RoomDetail, ExpenseDetail, CreatingExpense, Friends, CreatingFriend, AddNewMembers, UpdateRoomInfo} from '../pages';
 import TabStackScreens from './TabStackScreens';
 import { ApolloProvider } from '@apollo/client';
 import { client } from '@root/configuration/apollo';
@@ -13,6 +13,8 @@ export type MainStackParamList = {
     FRIENDS:{}
     CREATINGROOM: {};
     ROOMDETAIL: {};
+    ADDNEWMEMBERS: {};
+    UPDATEROOMINFO: {};
     EXPENSEDETAIL: {};
     CREATINGEXPENSE: {};
     CREATINGFRIEND:{}
@@ -36,6 +38,16 @@ const MainStackScreens: React.FC<MainStackScreensProps> = (props) => {
                 <Stack.Screen
                     name="ROOMDETAIL"
                     component={RoomDetail}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen 
+                    name="ADDNEWMEMBERS"
+                    component={AddNewMembers}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen 
+                    name="UPDATEROOMINFO"
+                    component={UpdateRoomInfo}
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen

@@ -6,29 +6,35 @@ import { GET_REQUEST_LIST, GET_ALL_FRIENDS } from '@root/graphql/queries/friend.
 import RequestFriendCard from '@root/components/requestFriendCard/RequestFriendCard';
 import { IRequest } from '@root/shared/interfaces/friend.interface';
 import { get } from 'lodash';
+import reactotron from 'reactotron-react-native';
 interface RequestFriendProps{
   currentUserID: string
 }
-const useGetList = (data: any, loading: boolean) => {
-  const [list, setList] = useState([]);
-  useEffect(() => {
-      if (!loading && data) {
-          setList(data);
-      }
-  }, [data, loading]);
-  return get(list, 'friends', []);
-};
+
 const RequestFriend: React.FC<RequestFriendProps> = (props) => {
   const {currentUserID} = props
-  const { data, loading, error } = useQuery(GET_REQUEST_LIST, {
-    variables: { page: 1, limit: 50, confirmed: false, receiver: currentUserID },
+  const { data, loading, error, refetch } = useQuery(GET_REQUEST_LIST, {
+    variables: { page: 1, limit: 1, confirmed: false, receiver: currentUserID },
   });
-  const list = useGetList(data, loading)
+  const [isUpdated, setIsUpdated] = useState(false)
+  const [pendingList, setPendingList] = useState([]);
+  
+  useEffect(() => {
+    refetch();
+    setIsUpdated(false)
+
+  }, [isUpdated])
+  useEffect(() => {
+    if(data)
+    {
+      setPendingList(data.friends)
+    }
+  }, [data])
   return(
     <ScrollView contentContainerStyle={{flexGrow : 1, alignItems : 'center'}}>
-      {list &&
-        list.map((requester: IRequest, index: number) => (
-          <RequestFriendCard key={index} requester={requester} userId={currentUserID}/>
+      {pendingList &&
+        pendingList.map((requester: IRequest, index: number) => (
+          <RequestFriendCard key={index} setIsUpdated={setIsUpdated} requester={requester} userId={currentUserID}/>
         ))
       }
           

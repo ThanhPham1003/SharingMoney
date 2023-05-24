@@ -15,7 +15,7 @@ const UserCard: React.FC<UserCardProps> = ({elementLeft=null, name, elementRight
   const navigation = useNavigation();
 
   return(
-    <TouchableOpacity style={styles.Container}>
+    <View style={styles.Container}>
       <View style={styles.ElementLeftSection}>
         {elementLeft}
       </View>
@@ -26,7 +26,7 @@ const UserCard: React.FC<UserCardProps> = ({elementLeft=null, name, elementRight
         {elementRight}
       </View>
 
-    </TouchableOpacity>
+    </View>
   )
 };
 

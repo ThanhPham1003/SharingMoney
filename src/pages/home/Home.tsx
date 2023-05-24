@@ -1,4 +1,4 @@
-import react, { useEffect, useState } from 'react';
+import react, { useEffect, useState, useContext } from 'react';
 import { withTheme, useTheme } from 'react-native-paper';
 import { StyleSheet, View, Image, Text, SafeAreaView,ScrollView, FlatList } from 'react-native';
 import { RoomCard } from '../../components';
@@ -8,32 +8,30 @@ import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { useQuery } from '@apollo/client';
 import { get } from 'lodash';
-import { GET_ALL_ROOMS } from '@root/graphql/queries/room.query';
+import { GET_MY_ROOMS } from '@root/graphql/queries/room.query';
 import {IRoom} from  '@root/shared/interfaces/room.interface';
-
+import { RoomUpdatedContext, RoomUpdatedProvider } from '@root/context';
+import { CurrentIDContext } from '@root/context';
 import reactotron from 'reactotron-react-native';
 import TextInput from '../../shared/components/textInput/TextInput'
+import { Decode } from '@root/shared/services/decode/jwt-decode';
 
-interface HomeProps {}
-const useGetList = (data: any, loading: boolean) => {
-    const [list, setList] = useState([]);
-    useEffect(() => {
-      console.log(data);
-      
-        if (!loading && data) {
-            setList(data);
-        }
-    }, [data, loading]);
-    return get(list, 'rooms', []);
-};
+interface HomeProps {
+}
 const Home: React.FC<HomeProps> = (props) => {
     const { colors } = useTheme();
     const navigation = useNavigation();
-    const { data, loading, error } = useQuery(GET_ALL_ROOMS, {
-        variables: { page: 1, pageSize: 10, limit: 10 },
+    const { data, loading, error, refetch } = useQuery(GET_MY_ROOMS, {
+        variables: { page: 1, limit: 10 },
     });
     const [roomList, setRoomList] = useState([])
     const [searchingText, setSearchingText] = useState('');
+    const reloadContext = useContext(RoomUpdatedContext)
+    const currentID = useContext(CurrentIDContext);
+    const getUser = async () => {
+        const currentUser = await Decode.decodeToken();
+        currentID?.setCurrentID({id:currentUser.id})
+    }
     const searchFilter = (text: string) => {
         if(text) {        
             const newRoomList = data.rooms.filter((item: IRoom) => {
@@ -49,13 +47,21 @@ const Home: React.FC<HomeProps> = (props) => {
         }
     }
     useEffect(() => {
-        if(data){
-            setRoomList(data.rooms)
-        }
-    }, [data])
+        refetch()
+    }, [reloadContext?.reload?.isRoomListUpdated])
     useEffect(() => {
-        reactotron.log("88888", searchingText)
-    },[searchingText])
+
+        if(data){
+            setRoomList(data.myrooms)
+        }
+        reloadContext?.setReload({isRoomListUpdated: false})
+    }, [data, reloadContext?.reload?.isRoomListUpdated])
+    // useEffect(() => {
+    //     console.log("77777", reloadContext?.reload?.isRoomListUpdated)
+    // },[reloadContext?.reload?.isRoomListUpdated])
+    useEffect(() => {
+        getUser();
+    }, [])
 
     return (
         <SafeAreaView style={styles.Container}>
@@ -63,11 +69,11 @@ const Home: React.FC<HomeProps> = (props) => {
             <View style={{ ...styles.BannerSection, backgroundColor: colors.primary_20 }}>
                 <View style={styles.TextArea}>
                     <Text style={styles.BiggerText}>
-                        Chia tiền dễ dàng cùng{' '}
+                        Easy money management with{' '}
                         <Text style={{ color: colors.primary }}>Sharing Money!</Text>
                     </Text>
                     <Text style={{ ...styles.SmallerText, color: colors.newtral_9 }}>
-                        Chỉ cần vài bước đơn giản mà không cần tới Excel
+                        Just a few simple steps without Excel
                     </Text>
                 </View>
                 <View style={styles.PhotoArea}>
@@ -119,11 +125,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
     },
     BannerSection: {
-        flex: 0.245,
+        flex: 0.27,
         flexDirection: 'row',
     },
     TextArea: {
-        flex: 0.5,
+        flex: 0.6,
         justifyContent: 'center',
         marginLeft: 20,
     },
@@ -136,10 +142,10 @@ const styles = StyleSheet.create({
     },
     SmallerText: {
         marginTop: 10,
-        fontSize: 11,
+        fontSize: 12,
     },
     PhotoArea: {
-        flex: 0.5,
+        flex: 0.4,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -149,7 +155,7 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
     RoomListSection: {
-        flex: 0.66,
+        flex: 0.6,
     },
     CreateRoomSection: {
         flex: 0.13,

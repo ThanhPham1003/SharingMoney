@@ -59,12 +59,12 @@ const ExpenseCard: React.FC<ExpenseProps> = (props: ExpenseProps) => {
         </View>
         <View style={styles.PayerArea}>
           <Image  style={styles.PictureProfileArea}
-            source={require('../../assets/images/Facebook-Logo.png')} 
+            source={require('../../assets/images/User.png')} 
           />
           <Text style={{...styles.PayerNameText, color: colors.neutral_4}}>{payerInfo.name}</Text>
         </View>
         <View style={styles.TimeArea}>
-          <Text style={{...styles.TimeText,color: colors.neutral_6}}> Time here</Text>
+          <Text style={{...styles.TimeText,color: colors.neutral_6}}>08/05/2023</Text>
         </View>
         
       </View>
