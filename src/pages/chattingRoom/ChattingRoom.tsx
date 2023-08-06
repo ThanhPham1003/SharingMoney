@@ -1,46 +1,114 @@
-import react, { useEffect, useState, useContext } from 'react';
+import react, { useEffect, useState, useContext, useCallback, useLayoutEffect } from 'react';
 import { withTheme, useTheme } from 'react-native-paper';
 import { StyleSheet, View, Image, Text, SafeAreaView,ScrollView, FlatList, TouchableOpacity } from 'react-native';
 import { TextInput } from '@root/shared/components';
+import firestore from '@react-native-firebase/firestore'
 import Icon from 'react-native-vector-icons/Feather';
-interface ChattingRoomProps {}
+import { GiftedChat } from 'react-native-gifted-chat'
+import { Decode } from '@root/shared/services/decode/jwt-decode'; 
+import { firebaseService } from '@root/shared/services/firebase/firebase';
+import { IRoom } from '@root/shared/interfaces/room.interface';
+import reactotron from 'reactotron-react-native';
+interface ChattingRoomProps {
+  room: IRoom
+}
 
-const ChattingRoom: React.FC<ChattingRoomProps> = () => {
+const ChattingRoom: React.FC<ChattingRoomProps> = (props) => {
   const { colors } = useTheme();
-  const [message, setMesage] = useState('')
-  const [tempMessage, setTempMessage] = useState('')
-  const [isSent, setIsSent] = useState(false);
-  return(
-    <View style={styles.Container}>
-      <View style={{...styles.MessageDisplaySection, backgroundColor: colors.primary_10}}>
-        {isSent ? (
-          <View style={{...styles.MessageStyle, backgroundColor: colors.primary_40}}>
-            <Text>{message}</Text>
-          </View>
-        ): (
-          <>
-          </>
-        )}
-      </View>
-      <View style={styles.TextInputSection}>
-        <TextInput
-          iconLeft={
-            <Icon style={{marginLeft: 5}} name="camera" size={22} color={colors.neutral}/>
-          }
-          variant='one-line'
-          placeholder='Message'
-          text={tempMessage}
-          setText={(text) => {setMesage(text); setTempMessage(text)}}
-          iconRight={
-            <TouchableOpacity onPress={() => {setIsSent(true); setTempMessage('')}}>
-              <Icon name="send" size={20} color={colors.neutral}/>
-            </TouchableOpacity>
-          }
-        />
-      </View>
-    </View>
+  // const [message, setMesage] = useState('')
+  // const [tempMessage, setTempMessage] = useState('')
+  // const [isSent, setIsSent] = useState(false);
+  const {room} = props
+  const [messages, setMessages] = useState([{
+    _id: 0,
+    text:"",
+    createdAt: new Date(),
+    user:{
+      _id: 0,
+      name: "",
+      avatar: ""
+    }
+  }]);
+  const [currentUser, setCurrentUser] = useState({
+    id: "",
+    email: "",
+    name: "",
+    avatar: "",
+  } || null);
+  const getId = async () => {
+    const currentUser = await Decode.decodeToken();
+    if(currentUser){
+      setCurrentUser(currentUser);
+    } 
+  }
+  useEffect( () => {
+    getId();
+  },[])
+
+  useLayoutEffect(() => {
+    const unsubscriber = firestore()
+    .collection(room._id)
+    .orderBy('createdAt', 'desc')
+    .onSnapshot(documentSnapshot => {
+      setMessages(
+        documentSnapshot.docs.map(doc => ({
+          _id: doc.data()._id,
+          createdAt: doc.data().createdAt.toDate(),
+          text: doc.data().text,
+          user: doc.data().user,
+        }))
+      )
+    });
+    return () => unsubscriber();
+  },[])
+  //   useLayoutEffect(() => {
+  //   const unsubscriber = firestore()
+  //   .collection(room._id)
+  //   .orderBy('createdAt', 'desc')
+  //   .onSnapshot(documentSnapshot => {
+ 
+  //     documentSnapshot.docs.map(doc => reactotron.log("77777", doc.data().text))
+  //   });
+  //   return () => unsubscriber();
+  // },[])
+
+
+  const onSend = useCallback((messages = []) => {
+    setMessages(previousMessages => GiftedChat.append(previousMessages, messages));
+    const { _id, createdAt, text, user} = messages[0];
+    firestore().collection(room._id).add({
+      _id,
+      createdAt,
+      text,
+      user
+    });
+  }, [])
+  // const unsubcribe = () =>{
+  //   const message = firebaseService.unsubscribe()
+  //   if(message){
+  //     setMessages(message)
+  //   }
+  // }
+  // useLayoutEffect(() => {
+  //   return () => unsubcribe();
+  // }, [])
+  // const onSend = useCallback((messages = []) =>{
+  //   setMessages(previousMessages => GiftedChat.append(previousMessages, messages));
+  //   const { _id, createdAt, text, user} = messages[0];
+  //   firebaseService.addMessage(_id, createdAt, text, user)
+  // }, [])
+  return (
+    <GiftedChat
+      messages={messages}
+      onSend={messages => onSend(messages)}
+      user={{
+        _id: currentUser.id,
+        name: currentUser.name,
+        avatar: currentUser.avatar
+      }}
+    />
   )
-};
+}
 const styles = StyleSheet.create({
   Container: {
     alignItems: 'center',

@@ -5,6 +5,7 @@ import { LocalStoreName } from '@root/shared/enums/local-store.enum';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage'
+import firestore from '@react-native-firebase/firestore'
 import reactotron from 'reactotron-react-native';
 GoogleSignin.configure({
     // scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
@@ -57,8 +58,9 @@ export const firebaseService = {
     },
     uploadImage: async (uri: string, fileName: string) => {
         try{
-
+            
             const reference = storage().ref(fileName);
+            reactotron.log("Uriiii", reference, uri, fileName)
             const pathToFile = uri;
             await reference.putFile(pathToFile);
             const url = await storage().ref(fileName).getDownloadURL();
@@ -67,7 +69,43 @@ export const firebaseService = {
             throw 'Could not select image'
         }
         
-    }
+    },
+    // unsubscribe: async () =>{
+    //     try{
+    //         let message
+    //         const query = await firestore()
+    //         .collection('chats')
+    //         .orderBy('createdAt', 'desc')
+    //         .onSnapshot(documentSnapshot => 
+    //             documentSnapshot.docs.map(doc => (message = {
+    //               _id: doc.data()._id,
+    //               createdAt: doc.data().createdAt.toDate(),
+    //               text: doc.data().text,
+    //               user: doc.data().user,
+    //             }))
+    //         )
+    //         reactotron.log("88888", message)
+    //         return message;
+    //     }catch(err){
+    //         throw 'Could not get message'
+    //     }
+    // },
+    // addMessage: async (_id:string, createdAt: string, text: string, user: object) => {
+    //     try{
+    //         const addMessage = await firestore().collection('chats').add({
+    //             _id,
+    //             createdAt,
+    //             text,
+    //             user
+    //         });
+    //         reactotron.log("555555", addMessage)
+    //         return addMessage
+            
+    //     }catch(err){
+    //         throw 'Could not add message'
+    //     }
+       
+    // }
     // signInWithFacebookAndroid: async () => {
     //     const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
 

@@ -28,7 +28,7 @@ const UpdateRoomInfo: React.FC<UpdateRoomInfoProps> = () => {
   const [updateRoom, { error: errorUpdateRoom, loading: isLoading, data: updateRoomData}] = useMutation(UPDATE_ROOM_MUTATION);
   const reloadContext = useContext(RoomUpdatedContext)
   const backHome = () =>{
-    navigation.navigate('SHARINGMONEY', {})
+    navigation.goBack();
   }
   let options = {
     saveToPhotos: true,

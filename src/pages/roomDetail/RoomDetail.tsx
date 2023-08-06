@@ -173,7 +173,7 @@ const RoomDetail: React.FC<RoomDetailProps> = () => {
                   <Text style={{...styles.TopTabTitle, color: colors.neutral_4}}>Members List</Text>
                 </TouchableOpacity >
                 <TouchableOpacity  style={{...styles.MembersList, borderColor: colors.neutral_8}} onPress={() => {setIsExpensesActive(false); setIsMembersListActive(false)}}>
-                  <Text style={{...styles.TopTabTitle, color: colors.neutral_4}}>Messagenger</Text>
+                  <Text style={{...styles.TopTabTitle, color: colors.neutral_4}}>Messenger</Text>
                 </TouchableOpacity >
               </>
             ):(
@@ -187,7 +187,7 @@ const RoomDetail: React.FC<RoomDetailProps> = () => {
                       <Text style={{...styles.TopTabTitle, color: activeColor}}>Members List</Text>
                     </TouchableOpacity >
                     <TouchableOpacity  style={{...styles.MembersList, borderColor: colors.neutral_8}} onPress={() => {setIsExpensesActive(false); setIsMembersListActive(false)}}>
-                      <Text style={{...styles.TopTabTitle, color: colors.neutral_4}}>Messagenger</Text>
+                      <Text style={{...styles.TopTabTitle, color: colors.neutral_4}}>Messenger</Text>
                     </TouchableOpacity >
                   </>
                 ):(
@@ -196,7 +196,7 @@ const RoomDetail: React.FC<RoomDetailProps> = () => {
                       <Text style={{...styles.TopTabTitle, color: colors.neutral_4}}>Members List</Text>
                     </TouchableOpacity >
                     <TouchableOpacity  style={{...styles.MembersList, borderColor: activeColor}} onPress={() => {setIsExpensesActive(false); setIsMembersListActive(false)}}>
-                      <Text style={{...styles.TopTabTitle, color: activeColor}}>Messagenger</Text>
+                      <Text style={{...styles.TopTabTitle, color: activeColor}}>Messenger</Text>
                     </TouchableOpacity >
                   </>
                 )}
@@ -269,7 +269,7 @@ const RoomDetail: React.FC<RoomDetailProps> = () => {
                   
                 </>
                 ):(
-                  <ChattingRoom />
+                  <ChattingRoom room={room}/>
                 )}
                   
               </>
